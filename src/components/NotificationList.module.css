@@ -1,0 +1,60 @@
+.notificationList {
+  padding: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.repoSection {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.repoSection h2 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.repoSection ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.repoSection li {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.repoSection a {
+  text-decoration: none;
+  color: #0366d6;
+  flex-grow: 1;
+}
+
+.repoSection a:hover {
+  text-decoration: underline;
+}
+
+.doneButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.doneButton:hover {
+  background-color: #218838;
+}
+
+.done {
+  text-decoration: line-through;
+  color: #6c757d;
+}
