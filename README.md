@@ -1,55 +1,29 @@
-# React + TypeScript + Vite
+# GH Sanity
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Tame GitHub notifications.
 
-Currently, two official plugins are available:
+## Features todo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
-
-## Features
-
+- all finished PRs mark as done (maybe not issues)
+- display issue or pr icon
+- checkbox select mass actions
 - all filter options/multiple filters
-- all finished PRs mark as done
+- get latest comment, or even bring up thread in pane to the right... enough to know if you want to click through
+- use since header to avoid killing api rate limit (conditional requests)
+- think about react strict mode killing api rate limit
+- look into webhooks (probably a no-go for org...)
+- rate limit component doesn't seem useful, I dunno.
+- done vs read
+- next app
+- add settings screen rather than hard code
+
+### Filters to add
+
+- Custom query
+- Label
+- finished/closed prs
+- closed issues
+
+## Added features
+
+- prioritize repos

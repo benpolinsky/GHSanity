@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getNotifications, markNotificationAsRead, markRepoNotificationsAsRead } from '../api/github';
 import styles from './NotificationList.module.css';
+import useNotificationDetails from '../hooks/useNotificationDetails';
+import NotificationItem from './NotificationItem'; // Import the new component
 
 interface Notification {
   id: string;
@@ -11,20 +13,29 @@ interface Notification {
     title: string;
     url: string;
   };
+  details: {
+    state: string;
+  };
 }
 
-const NotificationList: React.FC<{ token: string }> = ({ token }) => {
+
+const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }> = ({ token, prioritizedRepos = [] }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
   const [doneRepos, setDoneRepos] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
+  const { getNotificationDetails } = useNotificationDetails(token);
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const data = await getNotifications(token);
         if (data.status === 200) {
-          setNotifications(data.json);
+          const detailedNotifications = await Promise.all<Notification>(data.json.map(async (notification: Notification) => {
+            const details = await getNotificationDetails(notification.subject.url);
+            return { ...notification, details };
+          }));
+          setNotifications(detailedNotifications);
         } else {
           console.error(data);
           setError('Failed to fetch notifications');
@@ -34,8 +45,8 @@ const NotificationList: React.FC<{ token: string }> = ({ token }) => {
         console.error(err);
       }
     };
-    fetchNotifications();
-  }, [token]);
+    fetchNotifications().then(() => console.log("fetched"))
+  }, []); // probably incorrect, but 
 
   const getWebsiteUrl = (apiUrl: string) => {
     return apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
@@ -76,21 +87,32 @@ const NotificationList: React.FC<{ token: string }> = ({ token }) => {
     return acc;
   }, {} as Record<string, Notification[]>);
 
+  const sortedRepoNames = Object.keys(groupedNotifications).sort((a, b) => {
+    const aPriority = prioritizedRepos.includes(a) ? 0 : 1;
+    const bPriority = prioritizedRepos.includes(b) ? 0 : 1;
+    return aPriority - bPriority;
+  });
+
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}
-      {!error && Object.keys(groupedNotifications).map((repoName) => (
+      {!error && sortedRepoNames.map((repoName) => (
         <div key={repoName} className={`${styles.repoSection} ${doneRepos.has(repoName) ? styles.done : ''}`}>
-          <h2>
+          <h2 className={styles.repoName}>
             {repoName}
-            <button className={styles.doneButton} onClick={() => markRepoAsDone(repoName)}>Mark All as Read</button>
+            <button className={styles.doneButton} onClick={() => markRepoAsDone(repoName)}>
+              Mark all as read
+            </button>
           </h2>
-          <ul>
+          <ul className={styles.notificationItems}>
             {groupedNotifications[repoName].map((notification) => (
-              <li key={notification.id} className={doneNotifications.has(notification.id) ? styles.done : ''}>
-                <a target="_blank" href={getWebsiteUrl(notification.subject.url)}>{notification.subject.title}</a>
-                <button className={styles.doneButton} onClick={() => markNotificationAsDone(notification.id)}>Mark as Read</button>
-              </li>
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                doneNotifications={doneNotifications}
+                markNotificationAsDone={markNotificationAsDone}
+                getWebsiteUrl={getWebsiteUrl}
+              />
             ))}
           </ul>
         </div>
