@@ -1,42 +1,37 @@
 .notificationList {
-  font-family: 'Arial', sans-serif;
-  background-color: #f5f5f5;
+  font-family: 'Inter', sans-serif;
+  background-color: #1e1e1e;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
 }
 
 .error {
-  color: #ff4d4f;
-  background-color: #fff1f0;
+  color: #cf6679;
+  background-color: #2e2e2e;
   padding: 10px;
-  border: 1px solid #ffa39e;
+  border: 1px solid #cf6679;
   border-radius: 4px;
   margin-bottom: 20px;
-}
-
-.repoSection {
-  background-color: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #e8e8e8;
 }
 
 .repoName {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  font-size: 1.2em;
-  color: #333;
+  /* align-items: center; */
+  font-size: 1em;
+  color: #e0e0e0;
+  margin-bottom: 10px; /* Add margin for spacing */
+  border-bottom: 1px solid #3e3e3e; /* Add line separator */
+  padding-bottom: 5px; /* Add padding for spacing */
 }
 
 .doneButton {
   background: none;
   border: none;
   cursor: pointer;
-  color: green;
+  color: #03dac6;
   font-size: 0.8em;
   display: flex;
   align-items: center;
@@ -44,7 +39,7 @@
 }
 
 .doneButton:hover {
-  background-color: #40a9ff;
+  color: #018786;
 }
 
 .notificationItems {
@@ -57,8 +52,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 10px;
-  border-bottom: 1px solid #e8e8e8;
+  padding: 10px;
+  border-bottom: 1px solid #3e3e3e;
 }
 
 .notificationItem:last-child {
@@ -66,13 +61,8 @@
 }
 
 .notificationLink {
-  color: #1890ff;
   text-decoration: none;
   transition: color 0.3s;
-}
-
-.notificationLink:hover {
-  color: #40a9ff;
 }
 
 .notificationDetails {
@@ -89,4 +79,23 @@
   display: flex;
   flex-direction: row;
   width: 100px;
+}
+
+.filterButtons {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.filterButtons button {
+  background: none;
+  border: 1px solid #3e3e3e;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #e0e0e0;
+}
+
+.typeIcon {
+  margin-right: 10px;
+  height: 16px;
 }

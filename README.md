@@ -27,3 +27,7 @@ Tame GitHub notifications.
 ## Added features
 
 - prioritize repos
+
+## Design Focus
+
+The application features a clean, modern, and minimalistic dark theme with high-contrast text and subtle accents. The layout is uncluttered with clear typography and straightforward navigation, emphasizing readability and ease of use. Specific font sizes, line-heights, and consistent spacing are used to ensure a cohesive design.

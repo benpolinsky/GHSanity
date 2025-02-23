@@ -1,11 +1,12 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 14px;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
+  color: #e0e0e0;
+  background-color: #121212;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -19,35 +20,81 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: #eedada;
+  text-decoration: none;
 }
 a:hover {
-  color: #535bf2;
+  color: #ffffff;
+}
+
+a:visited {
+  color: #eedada;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #121212;
+  color: #e0e0e0;
+  line-height: 1.5;
+}
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  margin: 0.5em 0;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 2.5em;
+  line-height: 1.2;
 }
 
+h2 {
+  font-size: 2em;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.75em;
+  line-height: 1.4;
+}
+
+h4 {
+  font-size: 1.5em;
+  line-height: 1.5;
+}
+
+h5 {
+  font-size: 1.25em;
+  line-height: 1.6;
+}
+
+h6 {
+  font-size: 1em;
+  line-height: 1.7;
+}
+
+button {
+  background-color: #bb86fc;
+  color: #121212;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #121212;
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #6200ea;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #6200ea;
+    color: #ffffff;
   }
 }

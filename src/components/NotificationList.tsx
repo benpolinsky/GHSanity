@@ -12,6 +12,7 @@ interface Notification {
   subject: {
     title: string;
     url: string;
+    type: string; // Add type here
   };
   details: {
     state: string;
@@ -25,6 +26,7 @@ const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }>
   const [doneRepos, setDoneRepos] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const { getNotificationDetails } = useNotificationDetails(token);
+  const [filter, setFilter] = useState<string | null>(null); // Add filter state
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -78,7 +80,11 @@ const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }>
     }
   };
 
-  const groupedNotifications = notifications.reduce((acc, notification) => {
+  const filteredNotifications = filter
+    ? notifications.filter(notification => notification.subject.type === filter)
+    : notifications;
+
+  const groupedNotifications = filteredNotifications.reduce((acc, notification) => {
     const repoName = notification.repository.full_name;
     if (!acc[repoName]) {
       acc[repoName] = [];
@@ -96,8 +102,13 @@ const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }>
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}
+      <div className={styles.filterButtons}>
+        <button onClick={() => setFilter(null)}>All</button>
+        <button onClick={() => setFilter('PullRequest')}>Pull Requests</button>
+        <button onClick={() => setFilter('Issue')}>Issues</button>
+      </div>
       {!error && sortedRepoNames.map((repoName) => (
-        <div key={repoName} className={`${styles.repoSection} ${doneRepos.has(repoName) ? styles.done : ''}`}>
+        <div key={repoName} className={doneRepos.has(repoName) ? styles.done : ''}>
           <h2 className={styles.repoName}>
             {repoName}
             <button className={styles.doneButton} onClick={() => markRepoAsDone(repoName)}>
