@@ -133,6 +133,13 @@
   margin-right: 10px;
   height: 16px;
 }
+.iconOpen {
+  color: #28a745;
+}
+
+.iconClosed {
+  color: #cb2431;
+}
 
 .labels {
   display: flex;

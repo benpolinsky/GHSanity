@@ -27,25 +27,25 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({ setAdditionalFilt
   };
 
   return (
-    <div className={styles.filterButtons}>
-      <button className={activeAdditionalFilter === null ? styles.active : ""} onClick={() => setAdditionalFilter(null)}>
+    <div className={styles.filterLinks}>
+      <a href="#" className={activeAdditionalFilter === null ? styles.active : ""} onClick={() => setAdditionalFilter(null)}>
         All
-      </button>
-      <button className={activeAdditionalFilter === "assign" ? styles.active : ""} onClick={() => setAdditionalFilter('assign')}>
+      </a>
+      <a href="#" className={activeAdditionalFilter === "assign" ? styles.active : ""} onClick={() => setAdditionalFilter('assign')}>
         Assigned {filterCounts['assign'] ? `(${filterCounts['assign']})` : ''}
-      </button>
-      <button className={activeAdditionalFilter === "participating" ? styles.active : ""} onClick={() => setAdditionalFilter('participating')}>
+      </a>
+      <a href="#" className={activeAdditionalFilter === "participating" ? styles.active : ""} onClick={() => setAdditionalFilter('participating')}>
         Participating {filterCounts['participating'] ? `(${filterCounts['participating']})` : ''}
-      </button>
-      <button className={activeAdditionalFilter === "mention" ? styles.active : ""} onClick={() => setAdditionalFilter('mention')}>
+      </a>
+      <a href="#" className={activeAdditionalFilter === "mention" ? styles.active : ""} onClick={() => setAdditionalFilter('mention')}>
         Mentioned {filterCounts['mention'] ? `(${filterCounts['mention']})` : ''}
-      </button>
-      <button className={activeAdditionalFilter === "team_mention" ? styles.active : ""} onClick={() => setAdditionalFilter('team_mention')}>
+      </a>
+      <a href="#" className={activeAdditionalFilter === "team_mention" ? styles.active : ""} onClick={() => setAdditionalFilter('team_mention')}>
         Team Mentioned {filterCounts['team_mention'] ? `(${filterCounts['team_mention']})` : ''}
-      </button>
-      <button className={activeAdditionalFilter === "review_requested" ? styles.active : ""} onClick={() => setAdditionalFilter('review_requested')}>
+      </a>
+      <a href="#" className={activeAdditionalFilter === "review_requested" ? styles.active : ""} onClick={() => setAdditionalFilter('review_requested')}>
         Review Requested {filterCounts['review_requested'] ? `(${filterCounts['review_requested']})` : ''}
-      </button>
+      </a>
       <div>
         <label htmlFor="stateFilter">State:</label>
         <select id="stateFilter" value={state} onChange={handleStateChange}>

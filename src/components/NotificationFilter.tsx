@@ -10,10 +10,10 @@ interface NotificationFilterProps {
 
 const NotificationFilter: React.FC<NotificationFilterProps> = ({ setFilter, activeFilter }) => {
   return (
-    <div className={styles.filterButtons}>
-      <button className={activeFilter === null ? styles.active : ""}onClick={() => setFilter(null)}>All</button>
-      <button className={activeFilter === "PullRequest" ? styles.active : ""}onClick={() => setFilter('PullRequest')}>Pull Requests</button>
-      <button className={activeFilter === "Issue" ? styles.active : ""}onClick={() => setFilter('Issue')}>Issues</button>
+    <div className={styles.filterLinks}>
+      <a href="#" className={activeFilter === null ? styles.active : ""} onClick={() => setFilter(null)}>All</a>
+      <a href="#" className={activeFilter === "PullRequest" ? styles.active : ""} onClick={() => setFilter('PullRequest')}>Pull Requests</a>
+      <a href="#" className={activeFilter === "Issue" ? styles.active : ""} onClick={() => setFilter('Issue')}>Issues</a>
     </div>
   );
 };

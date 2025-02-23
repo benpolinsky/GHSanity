@@ -39,17 +39,13 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, doneN
   return (
     <li className={`${styles.notificationItem} ${doneNotifications.has(notification.id) ? styles.done : ''}`}>
       <span className={styles.notificationMain}>
-        <Icon className={styles.typeIcon}/>
+        <Icon className={`${styles.typeIcon} ${notification.details.state.toLowerCase() === "open" ? styles.iconOpen : styles.iconClosed}`}/>
         <a target="_blank" href={getWebsiteUrl(notification.subject.url)} className={styles.notificationLink}>{notification.subject.title}</a>
         <Labels labels={notification.details.labels} />
       </span>
-      <span className={styles.statusBox}>
         <button className={styles.itemDoneButton}>
           <MarkAsDoneIcon  onClick={() => markNotificationAsDone(notification.id)} />
-        </button>
-        <p className={styles.notificationDetails}>{notification.details.state}</p>
-      </span>
-      
+        </button>      
     </li>
   );
 };
