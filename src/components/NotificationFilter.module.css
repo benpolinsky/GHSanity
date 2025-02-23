@@ -1,6 +1,7 @@
 .filterButtons {
   display: flex;
   gap: 10px;
+  flex-direction: column;
   margin-bottom: 20px;
 }
 

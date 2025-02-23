@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { markNotificationAsRead, markRepoNotificationsAsRead } from '../api/github';
 import styles from './NotificationList.module.css';
 import NotificationItem, { Label } from './NotificationItem';
-import NotificationFilter, { ValidFilters } from './NotificationFilter';
-import AdditionalFilters from './AdditionalFilters'; // Import AdditionalFilters component
+import { ValidFilters } from './NotificationFilter';
 
 interface Notification {
   id: string;
@@ -28,14 +27,14 @@ interface NotificationListProps {
   labelFilters: string[];
   prioritizedRepos: string[];
   error: string | null;
+  filter: ValidFilters | null;
+  additionalFilter: string | null;
+  stateFilter: string;
 }
 
-const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error }) => {
+const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter }) => {
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
   const [doneRepos, setDoneRepos] = useState<Set<string>>(new Set());
-  const [filter, setFilter] = useState<ValidFilters | null>(null);
-  const [additionalFilter, setAdditionalFilter] = useState<string | null>(null); // Add additional filter
-  const [stateFilter, setStateFilter] = useState<string>('all'); // Default to 'all'
 
   const getWebsiteUrl = (apiUrl: string) => {
     return apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
@@ -93,13 +92,6 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}
-      <NotificationFilter setFilter={setFilter} activeFilter={filter} />
-      <AdditionalFilters 
-        setAdditionalFilter={setAdditionalFilter} 
-        activeAdditionalFilter={additionalFilter} 
-        notifications={notifications} 
-        onFilterChange={setStateFilter} // Pass setStateFilter to AdditionalFilters
-      />
       {!error && sortedRepoNames.map((repoName) => (
         <div key={repoName} className={doneRepos.has(repoName) ? `${styles.done} ${styles.repo}` : styles.repo}>
           <h2 className={styles.repoName}>

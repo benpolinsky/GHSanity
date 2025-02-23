@@ -13,3 +13,12 @@
   flex: 1;
   padding: 20px;
 }
+
+.filtersContainer {
+  flex: 0 0 50px; /* Set the width to 50px */
+  margin-right: 20px;
+}
+
+.notificationList {
+  flex: 1;
+}
