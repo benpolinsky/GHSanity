@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { getNotifications, markNotificationAsRead, markRepoNotificationsAsRead } from '../api/github';
 import styles from './NotificationList.module.css';
 import useNotificationDetails from '../hooks/useNotificationDetails';
-import NotificationItem from './NotificationItem'; // Import the new component
+import NotificationItem, { Label } from './NotificationItem'; // Import the new component
+import NotificationFilter, { ValidFilters } from './NotificationFilter';
+import LabelFilter from './LabelFilter'; // Import the new component
 
 interface Notification {
   id: string;
@@ -16,6 +18,7 @@ interface Notification {
   };
   details: {
     state: string;
+    labels: Label[]; // Add labels here
   };
 }
 
@@ -26,7 +29,9 @@ const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }>
   const [doneRepos, setDoneRepos] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const { getNotificationDetails } = useNotificationDetails(token);
-  const [filter, setFilter] = useState<string | null>(null); // Add filter state
+  const [filter, setFilter] = useState<ValidFilters | null>(null); // Add filter state
+  const [labelFilters, setLabelFilters] = useState<string[]>([]); // Add label filters state
+  const allLabels = Array.from(new Set(notifications.flatMap(notification => notification.details.labels.map(label => label.name)))); // Get all unique labels
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -80,9 +85,11 @@ const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }>
     }
   };
 
-  const filteredNotifications = filter
-    ? notifications.filter(notification => notification.subject.type === filter)
-    : notifications;
+  const filteredNotifications = notifications.filter(notification => {
+    const matchesType = filter ? notification.subject.type === filter : true;
+    const labelExcludes = notification.details.labels.some(label => labelFilters.includes(label.name));
+    return matchesType && !labelExcludes;
+  });
 
   const groupedNotifications = filteredNotifications.reduce((acc, notification) => {
     const repoName = notification.repository.full_name;
@@ -102,13 +109,10 @@ const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }>
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}
-      <div className={styles.filterButtons}>
-        <button onClick={() => setFilter(null)}>All</button>
-        <button onClick={() => setFilter('PullRequest')}>Pull Requests</button>
-        <button onClick={() => setFilter('Issue')}>Issues</button>
-      </div>
+      <NotificationFilter setFilter={setFilter} activeFilter={filter} /> {/* Add the new component */}
+      <LabelFilter labelFilters={labelFilters} setLabelFilters={setLabelFilters} allLabels={allLabels} /> {/* Pass allLabels prop */}
       {!error && sortedRepoNames.map((repoName) => (
-        <div key={repoName} className={doneRepos.has(repoName) ? styles.done : ''}>
+        <div key={repoName} className={doneRepos.has(repoName) ? `${styles.done} ${styles.repo}` : styles.repo}>
           <h2 className={styles.repoName}>
             {repoName}
             <button className={styles.doneButton} onClick={() => markRepoAsDone(repoName)}>

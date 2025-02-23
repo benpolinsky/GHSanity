@@ -15,6 +15,9 @@
   border-radius: 4px;
   margin-bottom: 20px;
 }
+.repo {
+  margin-bottom: 40px;
+}
 
 .repoName {
   display: flex;
@@ -50,10 +53,15 @@
 
 .notificationItem {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  flex: auto;
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #3e3e3e;
+}
+
+.notificationMain {
+  flex: 5;
 }
 
 .notificationItem:last-child {
@@ -78,7 +86,7 @@
 .statusBox {
   display: flex;
   flex-direction: row;
-  width: 100px;
+  flex: 1;
 }
 
 .filterButtons {
@@ -98,4 +106,18 @@
 .typeIcon {
   margin-right: 10px;
   height: 16px;
+}
+
+.labels {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.label {
+  /* background-color: #3e3e3e; */
+  color: #e0e0e0;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.8em;
 }
