@@ -15,6 +15,7 @@ Tame GitHub notifications.
 - done vs read
 - add settings screen rather than hard code
 - look into webhooks (probably a no-go for org...)
+- undo
 
 ### Filters to add
 

@@ -1,0 +1,16 @@
+.filterButtons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filterButtons button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.active {
+  background: #03dac6;
+  color: #121212;
+  border: none;
+}

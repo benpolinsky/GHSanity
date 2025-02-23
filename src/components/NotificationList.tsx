@@ -3,9 +3,11 @@ import { markNotificationAsRead, markRepoNotificationsAsRead } from '../api/gith
 import styles from './NotificationList.module.css';
 import NotificationItem, { Label } from './NotificationItem';
 import NotificationFilter, { ValidFilters } from './NotificationFilter';
+import AdditionalFilters from './AdditionalFilters'; // Import AdditionalFilters component
 
 interface Notification {
   id: string;
+  reason: string
   repository: {
     full_name: string;
   };
@@ -32,6 +34,8 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
   const [doneRepos, setDoneRepos] = useState<Set<string>>(new Set());
   const [filter, setFilter] = useState<ValidFilters | null>(null);
+  const [additionalFilter, setAdditionalFilter] = useState<string | null>(null); // Add additional filter
+  const [stateFilter, setStateFilter] = useState<string>('all'); // Default to 'all'
 
   const getWebsiteUrl = (apiUrl: string) => {
     return apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
@@ -65,8 +69,10 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
 
   const filteredNotifications = notifications.filter(notification => {
     const matchesType = filter ? notification.subject.type === filter : true;
+    const matchesAdditionalFilter = additionalFilter ? notification.reason === additionalFilter : true;
+    const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state.includes('closed') : notification.details.state.includes('closed'));
     const labelExcludes = notification.details.labels.some(label => labelFilters.includes(label.name));
-    return matchesType && !labelExcludes;
+    return matchesType && matchesAdditionalFilter && matchesState && !labelExcludes;
   });
 
   const groupedNotifications = filteredNotifications.reduce((acc, notification) => {
@@ -88,6 +94,12 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}
       <NotificationFilter setFilter={setFilter} activeFilter={filter} />
+      <AdditionalFilters 
+        setAdditionalFilter={setAdditionalFilter} 
+        activeAdditionalFilter={additionalFilter} 
+        notifications={notifications} 
+        onFilterChange={setStateFilter} // Pass setStateFilter to AdditionalFilters
+      />
       {!error && sortedRepoNames.map((repoName) => (
         <div key={repoName} className={doneRepos.has(repoName) ? `${styles.done} ${styles.repo}` : styles.repo}>
           <h2 className={styles.repoName}>

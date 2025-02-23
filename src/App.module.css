@@ -1,0 +1,15 @@
+.appContainer {
+  display: flex;
+}
+
+.leftPane {
+  width: 250px;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-right: 1px solid #3e3e3e;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 20px;
+}

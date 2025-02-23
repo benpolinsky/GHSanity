@@ -44,8 +44,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, doneN
         <Labels labels={notification.details.labels} />
       </span>
       <span className={styles.statusBox}>
-        <button className={styles.doneButton} onClick={() => markNotificationAsDone(notification.id)}>
-          <MarkAsDoneIcon />
+        <button className={styles.itemDoneButton}>
+          <MarkAsDoneIcon  onClick={() => markNotificationAsDone(notification.id)} />
         </button>
         <p className={styles.notificationDetails}>{notification.details.state}</p>
       </span>
