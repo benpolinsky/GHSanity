@@ -38,6 +38,7 @@ body {
   background-color: #121212;
   color: #e0e0e0;
   line-height: 1.5;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -94,7 +95,6 @@ button {
     color: #6200ea;
   }
   button {
-    background-color: #6200ea;
     color: #ffffff;
   }
 }

@@ -25,6 +25,7 @@ const LabelFilter: React.FC<LabelFilterProps> = ({ labelFilters, setLabelFilters
 
   return (
     <div className={styles.labelFilter}>
+      <p id="label-filter">Label Filter</p>
       <div className={styles.comboboxContainer}>
         <Combobox
           onSelect={addLabelFilter}
@@ -33,7 +34,7 @@ const LabelFilter: React.FC<LabelFilterProps> = ({ labelFilters, setLabelFilters
           <ComboboxInput
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Filter by label"
+            placeholder="Exclude by label"
             className={styles.comboboxInput} 
           />
           <ComboboxPopover>

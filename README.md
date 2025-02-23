@@ -4,6 +4,7 @@ Tame GitHub notifications.
 
 ## Features todo
 
+- filter by label is inverted, maube select existing and then select exlude.
 - checkbox select mass actions
 - all finished PRs mark as done (maybe not issues)
 - all filter options/multiple filters
@@ -18,10 +19,10 @@ Tame GitHub notifications.
 ### Filters to add
 
 - Custom query
-- Label
 - finished/closed prs
 - closed issues
 
 ## Added features to expose in settings
 
 - prioritize repos
+- Label

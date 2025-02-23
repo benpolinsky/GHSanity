@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { getNotifications, markNotificationAsRead, markRepoNotificationsAsRead } from '../api/github';
+import React, { useState } from 'react';
+import { markNotificationAsRead, markRepoNotificationsAsRead } from '../api/github';
 import styles from './NotificationList.module.css';
-import useNotificationDetails from '../hooks/useNotificationDetails';
-import NotificationItem, { Label } from './NotificationItem'; // Import the new component
+import NotificationItem, { Label } from './NotificationItem';
 import NotificationFilter, { ValidFilters } from './NotificationFilter';
-import LabelFilter from './LabelFilter'; // Import the new component
 
 interface Notification {
   id: string;
@@ -14,46 +12,26 @@ interface Notification {
   subject: {
     title: string;
     url: string;
-    type: string; // Add type here
+    type: string;
   };
   details: {
     state: string;
-    labels: Label[]; // Add labels here
+    labels: Label[];
   };
 }
 
+interface NotificationListProps {
+  token: string;
+  notifications: Notification[];
+  labelFilters: string[];
+  prioritizedRepos: string[];
+  error: string | null;
+}
 
-const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }> = ({ token, prioritizedRepos = [] }) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error }) => {
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
   const [doneRepos, setDoneRepos] = useState<Set<string>>(new Set());
-  const [error, setError] = useState<string | null>(null);
-  const { getNotificationDetails } = useNotificationDetails(token);
-  const [filter, setFilter] = useState<ValidFilters | null>(null); // Add filter state
-  const [labelFilters, setLabelFilters] = useState<string[]>([]); // Add label filters state
-  const allLabels = Array.from(new Set(notifications.flatMap(notification => notification.details.labels.map(label => label.name)))); // Get all unique labels
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const data = await getNotifications(token);
-        if (data.status === 200) {
-          const detailedNotifications = await Promise.all<Notification>(data.json.map(async (notification: Notification) => {
-            const details = await getNotificationDetails(notification.subject.url);
-            return { ...notification, details };
-          }));
-          setNotifications(detailedNotifications);
-        } else {
-          console.error(data);
-          setError('Failed to fetch notifications');
-        }
-      } catch (err) {
-        setError('Failed to fetch notifications');
-        console.error(err);
-      }
-    };
-    fetchNotifications().then(() => console.log("fetched"))
-  }, []); // probably incorrect, but 
+  const [filter, setFilter] = useState<ValidFilters | null>(null);
 
   const getWebsiteUrl = (apiUrl: string) => {
     return apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
@@ -109,8 +87,7 @@ const NotificationList: React.FC<{ token: string, prioritizedRepos?: string[] }>
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}
-      <NotificationFilter setFilter={setFilter} activeFilter={filter} /> {/* Add the new component */}
-      <LabelFilter labelFilters={labelFilters} setLabelFilters={setLabelFilters} allLabels={allLabels} /> {/* Pass allLabels prop */}
+      <NotificationFilter setFilter={setFilter} activeFilter={filter} />
       {!error && sortedRepoNames.map((repoName) => (
         <div key={repoName} className={doneRepos.has(repoName) ? `${styles.done} ${styles.repo}` : styles.repo}>
           <h2 className={styles.repoName}>
