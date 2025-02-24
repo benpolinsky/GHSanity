@@ -58,6 +58,8 @@ const App: React.FC = () => {
     })
   })
 
+  const allRepoNames = new Set(notifications.map((notification) => notification.repository.full_name))
+
   return (
     <>
       <div className={styles.appContainer}>
@@ -70,6 +72,7 @@ const App: React.FC = () => {
             onFilterChange={setStateFilter}
           />
           <SettingsPane
+            allRepoNames={[...allRepoNames]}
             labelFilters={labelFilters}
             setLabelFilters={setLabelFilters}
             allLabels={allLabels}

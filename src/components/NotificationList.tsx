@@ -96,6 +96,7 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     return aPriority - bPriority;
   });
 
+
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}

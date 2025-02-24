@@ -8,7 +8,7 @@ import CloseIcon from '../assets/close.svg?react';
 import RateLimit from '../RateLimit';
 import { SettingsPaneProps } from '../types'; // Import consolidated types
 
-const SettingsPane: React.FC<SettingsPaneProps> = ({ labelFilters, setLabelFilters, allLabels, prioritizedRepos, setPrioritizedRepos }) => {
+const SettingsPane: React.FC<SettingsPaneProps> = ({ labelFilters, setLabelFilters, allLabels, prioritizedRepos, setPrioritizedRepos, allRepoNames }) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleVisibility = () => {
@@ -23,7 +23,7 @@ const SettingsPane: React.FC<SettingsPaneProps> = ({ labelFilters, setLabelFilte
                     <div className={styles.settingsPane}>
                         <CloseIcon onClick={toggleVisibility} className={styles.closeIcon} />
                         <LabelFilter labelFilters={labelFilters} setLabelFilters={setLabelFilters} allLabels={allLabels} />
-                        <RepoPrioritization prioritizedRepos={prioritizedRepos} setPrioritizedRepos={setPrioritizedRepos} />
+                        <RepoPrioritization prioritizedRepos={prioritizedRepos} setPrioritizedRepos={setPrioritizedRepos} allRepoNames={allRepoNames} />
                         <RateLimit />
                     </div>
                 </div>,

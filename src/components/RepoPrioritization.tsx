@@ -1,37 +1,49 @@
 import React, { useState } from 'react';
+import { RepoPrioritizationProps } from '../types'; // Import consolidated types
 
-interface RepoPrioritizationProps {
-    prioritizedRepos: string[];
-    setPrioritizedRepos: (repos: string[]) => void;
-}
+const RepoPrioritization: React.FC<RepoPrioritizationProps> = ({ prioritizedRepos, setPrioritizedRepos, allRepoNames }) => {
+  const [inputValue, setInputValue] = useState('');
 
-const RepoPrioritization: React.FC<RepoPrioritizationProps> = ({ prioritizedRepos, setPrioritizedRepos }) => {
-    const [newRepo, setNewRepo] = useState('');
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
 
-    const addRepo = () => {
-        if (newRepo && !prioritizedRepos.includes(newRepo)) {
-            setPrioritizedRepos([...prioritizedRepos, newRepo]);
-            setNewRepo('');
-        }
-    };
+  const handleAddRepo = () => {
+    if (inputValue && !prioritizedRepos.includes(inputValue)) {
+      setPrioritizedRepos([...prioritizedRepos, inputValue]);
+      setInputValue('');
+    }
+  };
 
-    return (
-        <div>
-            <p>Repo Prioritization</p>
-            <input
-                type="text"
-                value={newRepo}
-                onChange={(e) => setNewRepo(e.target.value)}
-                placeholder="Enter repository name"
-            />
-            <button onClick={addRepo}>Add</button>
-            <ul>
-                {prioritizedRepos.map((repo, index) => (
-                    <li key={index}>{repo}</li>
-                ))}
-            </ul>
-        </div>
-    );
+  const handleRemoveRepo = (repo: string) => {
+    setPrioritizedRepos(prioritizedRepos.filter(r => r !== repo));
+  };
+
+  return (
+    <div>
+      <h3>Prioritize Repositories</h3>
+      <input
+        list="repo-names"
+        value={inputValue}
+        onChange={handleInputChange}
+        placeholder="Enter or select a repository"
+      />
+      <datalist id="repo-names">
+        {allRepoNames.map(repoName => (
+          <option key={repoName} value={repoName} />
+        ))}
+      </datalist>
+      <button onClick={handleAddRepo}>Add</button>
+      <ul>
+        {prioritizedRepos.map(repo => (
+          <li key={repo}>
+            {repo}
+            <button onClick={() => handleRemoveRepo(repo)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default RepoPrioritization;

@@ -49,12 +49,19 @@ export interface SettingsPaneProps {
   allLabels: string[];
   prioritizedRepos: string[];
   setPrioritizedRepos: (repos: string[]) => void;
+  allRepoNames: string[];
 }
 
 export interface LabelFilterProps {
   labelFilters: string[];
   setLabelFilters: React.Dispatch<React.SetStateAction<string[]>>;
   allLabels: string[];
+}
+
+export interface RepoPrioritizationProps {
+  prioritizedRepos: string[];
+  setPrioritizedRepos: (repos: string[]) => void;
+  allRepoNames: string[];
 }
 
 export type ValidFilters = 'Issue' | 'PullRequest' | null;
