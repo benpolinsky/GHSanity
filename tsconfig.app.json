@@ -21,6 +21,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "types": ["vitest/globals", "vite", "@testing-library/jest-dom/vitest"],
 
     "inlineSourceMap": true
   },

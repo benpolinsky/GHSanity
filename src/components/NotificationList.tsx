@@ -16,7 +16,7 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     try {
       const response = await markNotificationAsRead(token, id);
       if (response.status === 205) {
-        setDoneNotifications(new Set(doneNotifications).add(id));
+        setDoneNotifications(prevDoneNotifications => new Set(prevDoneNotifications).add(id));
       } else {
         console.error('Failed to mark notification as done', response);
       }
@@ -36,9 +36,12 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   };
 
   const markSelectedAsDone = async () => {
+    const newDoneNotifications = new Set(doneNotifications);
     for (const id of selectedNotifications) {
       await markNotificationAsDone(id);
+      newDoneNotifications.add(id);
     }
+    setDoneNotifications(newDoneNotifications);
     setSelectedNotifications(new Set());
   };
 

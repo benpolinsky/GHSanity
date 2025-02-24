@@ -40,7 +40,7 @@ const LabelFilter: React.FC<LabelFilterProps> = ({ labelFilters, setLabelFilters
             </ComboboxList>
           </ComboboxPopover>
         </Combobox>
-        <button onClick={() => addLabelFilter(inputValue)} className={styles.addButton}>Add</button>
+        <button data-testid="addLabel" onClick={() => addLabelFilter(inputValue)} className={styles.addButton}>Add</button>
       </div>
       <div className={styles.selectedLabels}>
         {labelFilters.map(label => (

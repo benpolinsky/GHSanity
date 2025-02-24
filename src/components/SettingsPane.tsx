@@ -17,11 +17,11 @@ const SettingsPane: React.FC<SettingsPaneProps> = ({ labelFilters, setLabelFilte
 
     return (
         <div>
-            <GearIcon className={styles.gearIcon} onClick={toggleVisibility} />
+            <GearIcon className={styles.gearIcon} onClick={toggleVisibility} data-testid="gear-icon" />
             {isVisible && ReactDOM.createPortal(
                 <div className={styles.overlay}>
                     <div className={styles.settingsPane}>
-                        <CloseIcon onClick={toggleVisibility} className={styles.closeIcon} />
+                        <CloseIcon onClick={toggleVisibility} className={styles.closeIcon} data-testid="close-icon" />
                         <LabelFilter labelFilters={labelFilters} setLabelFilters={setLabelFilters} allLabels={allLabels} />
                         <RepoPrioritization prioritizedRepos={prioritizedRepos} setPrioritizedRepos={setPrioritizedRepos} allRepoNames={allRepoNames} />
                         <RateLimit />

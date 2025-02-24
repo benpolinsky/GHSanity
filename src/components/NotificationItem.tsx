@@ -18,20 +18,21 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, doneN
   }
 
   return (
-    <li className={`${styles.notificationItem} ${doneNotifications.has(notification.id) ? styles.done : ''}`}>
+    <li className={`${styles.notificationItem} ${doneNotifications.has(notification.id) ? styles.done : ''}`} data-testid={`notification-item-${notification.id}`}>
       <input
         type="checkbox"
         checked={isSelected}
         onChange={() => toggleNotificationSelection(notification.id)}
+        data-testid={`checkbox-${notification.id}`}
       />
       <span className={styles.notificationMain}>
         <Icon className={`${styles.typeIcon} ${notification.details.state?.toLowerCase() === "open" ? styles.iconOpen : styles.iconClosed}`}/>
         <a target="_blank" href={getWebsiteUrl(notification.subject.url)} className={styles.notificationLink}>{notification.subject.title}</a>
         <Labels labels={notification.details.labels} />
       </span>
-        <button className={styles.itemDoneButton}>
-          <MarkAsDoneIcon  onClick={() => markNotificationAsDone(notification.id)} />
-        </button>      
+      <button className={styles.itemDoneButton} data-testid={`mark-as-done-${notification.id}`}>
+        <MarkAsDoneIcon onClick={() => markNotificationAsDone(notification.id)} />
+      </button>
     </li>
   );
 };

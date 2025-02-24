@@ -33,12 +33,12 @@ const RepoPrioritization: React.FC<RepoPrioritizationProps> = ({ prioritizedRepo
           <option key={repoName} value={repoName} />
         ))}
       </datalist>
-      <button onClick={handleAddRepo}>Add</button>
+      <button data-testid="addRepo" onClick={handleAddRepo}>Add</button>
       <ul>
         {prioritizedRepos.map(repo => (
           <li key={repo}>
             {repo}
-            <button onClick={() => handleRemoveRepo(repo)}>Remove</button>
+            <button data-testid={`removeRepo-${repo}`} onClick={() => handleRemoveRepo(repo)}>Remove</button>
           </li>
         ))}
       </ul>
