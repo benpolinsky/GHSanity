@@ -15,7 +15,7 @@ export interface Notification {
   subject: {
     title: string;
     url: string;
-    type: string;
+    type: "PullRequest" | "Issue" | "Release";
   };
   details: {
     state: string;

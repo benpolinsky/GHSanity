@@ -2,12 +2,20 @@ import React from 'react';
 import styles from './NotificationList.module.css';
 import IssueIcon from '../assets/issue.svg?react';
 import PRIcon from '../assets/pr.svg?react';
+import ReleaseIcon from '../assets/release.svg?react'; // Import Release icon
 import MarkAsDoneIcon from '../assets/check.svg?react';
 import Labels from './Labels';
 import { NotificationItemProps } from '../types'; // Import consolidated types
 
 const NotificationItem: React.FC<NotificationItemProps> = ({ notification, doneNotifications, markNotificationAsDone, getWebsiteUrl, toggleNotificationSelection, isSelected }) => {
-  const Icon = notification.subject.type === 'PullRequest' ? PRIcon : IssueIcon;
+  let Icon;
+  if (notification.subject.type === 'PullRequest') {
+    Icon = PRIcon;
+  } else if (notification.subject.type === 'Release') {
+    Icon = ReleaseIcon;
+  } else {
+    Icon = IssueIcon;
+  }
 
   return (
     <li className={`${styles.notificationItem} ${doneNotifications.has(notification.id) ? styles.done : ''}`}>

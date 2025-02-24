@@ -76,7 +76,7 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   const filteredNotifications = notifications.filter(notification => {
     const matchesType = filter ? notification.subject.type === filter : true;
     const matchesAdditionalFilter = additionalFilter ? notification.reason === additionalFilter : true;
-    const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state.includes('closed') : notification.details.state.includes('closed'));
+    const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state?.includes('closed') : notification.details.state?.includes('closed'));
     const labelExcludes = notification.details.labels?.some(label => labelFilters.includes(label.name));
     return matchesType && matchesAdditionalFilter && matchesState && !labelExcludes;
   });

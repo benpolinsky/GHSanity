@@ -5,7 +5,6 @@ Tame GitHub notifications.
 ## Features todo
 
 - filter by label is inverted, maybe select existing and then select exclude.
-- checkbox select mass actions
 - all finished PRs mark as done (maybe not issues)
 - all filter options/multiple filters
 - get latest comment, or even bring up thread in pane to the right... enough to know if you want to click through
@@ -26,5 +25,4 @@ Tame GitHub notifications.
 
 ## Added features to expose in settings
 
-- prioritize repos
-- Label
+- prioritize repos needs work
