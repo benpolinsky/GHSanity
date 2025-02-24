@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import NotificationList from "./components/NotificationList";
 import SettingsPane from "./components/SettingsPane";
-import NotificationFilter, {
-  ValidFilters,
-} from "./components/NotificationFilter";
+import NotificationFilter, { ValidFilters } from "./components/NotificationFilter";
 import AdditionalFilters from "./components/AdditionalFilters";
 import { getNotifications } from "./api/github";
 import useNotificationDetails from "./hooks/useNotificationDetails";
 import styles from "./App.module.css";
+import { Notification } from './types'; // Import consolidated types
 
 const App: React.FC = () => {
   const token = import.meta.env.VITE_GITHUB_TOKEN; // Use Vite environment variable for GitHub token
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [labelFilters, setLabelFilters] = useState<string[]>([]);
   const [prioritizedRepos, setPrioritizedRepos] = useState<string[]>([
     "iTwin/itwinjs-core",
@@ -29,7 +28,7 @@ const App: React.FC = () => {
         const data = await getNotifications(token);
         if (data.status === 200) {
           const detailedNotifications = await Promise.all(
-            data.json.map(async (notification: any) => {
+            data.json.map(async (notification: Notification) => {
               const details = await getNotificationDetails(
                 notification.subject.url
               );
@@ -49,13 +48,15 @@ const App: React.FC = () => {
     fetchNotifications().then(() => console.log("fetched"));
   }, [token, getNotificationDetails]);
 
-  const allLabels = Array.from(
-    new Set(
-      notifications.flatMap((notification) =>
-        notification.details.labels.map((label: any) => label.name)
-      )
-    )
-  );
+  const allLabels: string[] = []
+
+  notifications.forEach((notification) => {
+    notification.details.labels?.forEach(label => {
+      if (!allLabels.includes(label.name)) {
+        allLabels.push(label.name)
+      }
+    })
+  })
 
   return (
     <>

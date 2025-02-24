@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './AdditionalFilters.module.css';
+import { Notification } from '../types'; // Import consolidated types
 
 interface AdditionalFiltersProps {
   setAdditionalFilter: React.Dispatch<React.SetStateAction<string | null>>;

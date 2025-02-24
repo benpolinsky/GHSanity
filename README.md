@@ -4,7 +4,7 @@ Tame GitHub notifications.
 
 ## Features todo
 
-- filter by label is inverted, maube select existing and then select exlude.
+- filter by label is inverted, maybe select existing and then select exclude.
 - checkbox select mass actions
 - all finished PRs mark as done (maybe not issues)
 - all filter options/multiple filters
@@ -13,7 +13,8 @@ Tame GitHub notifications.
 - think about react strict mode killing api rate limit
 - rate limit component doesn't seem useful, I dunno.
 - done vs read
-- add settings screen rather than hard code
+- unread/redone
+- add settings screen 
 - look into webhooks (probably a no-go for org...)
 - undo
 

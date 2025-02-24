@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from '@reach/combobox';
 import '@reach/combobox/styles.css';
 import styles from './LabelFilter.module.css';
-
-interface LabelFilterProps {
-  labelFilters: string[];
-  setLabelFilters: React.Dispatch<React.SetStateAction<string[]>>;
-  allLabels: string[]; // Add allLabels prop
-}
+import { LabelFilterProps } from '../types'; // Import consolidated types
 
 const LabelFilter: React.FC<LabelFilterProps> = ({ labelFilters, setLabelFilters, allLabels }) => {
   const [inputValue, setInputValue] = useState('');

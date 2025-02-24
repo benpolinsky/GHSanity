@@ -1,36 +1,8 @@
 import React, { useState } from 'react';
 import { markNotificationAsRead, markRepoNotificationsAsRead } from '../api/github';
 import styles from './NotificationList.module.css';
-import NotificationItem, { Label } from './NotificationItem';
-import { ValidFilters } from './NotificationFilter';
-
-interface Notification {
-  id: string;
-  reason: string
-  repository: {
-    full_name: string;
-  };
-  subject: {
-    title: string;
-    url: string;
-    type: string;
-  };
-  details: {
-    state: string;
-    labels: Label[];
-  };
-}
-
-interface NotificationListProps {
-  token: string;
-  notifications: Notification[];
-  labelFilters: string[];
-  prioritizedRepos: string[];
-  error: string | null;
-  filter: ValidFilters | null;
-  additionalFilter: string | null;
-  stateFilter: string;
-}
+import NotificationItem from './NotificationItem';
+import { Notification, NotificationListProps } from '../types'; // Import consolidated types
 
 const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter }) => {
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
@@ -70,7 +42,7 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     const matchesType = filter ? notification.subject.type === filter : true;
     const matchesAdditionalFilter = additionalFilter ? notification.reason === additionalFilter : true;
     const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state.includes('closed') : notification.details.state.includes('closed'));
-    const labelExcludes = notification.details.labels.some(label => labelFilters.includes(label.name));
+    const labelExcludes = notification.details.labels?.some(label => labelFilters.includes(label.name));
     return matchesType && matchesAdditionalFilter && matchesState && !labelExcludes;
   });
 

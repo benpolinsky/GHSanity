@@ -1,21 +1,14 @@
 import React from 'react';
 import styles from './NotificationList.module.css';
-
-interface Label {
-  id: number;
-  name: string;
-  color: string; 
-  description: string;
-  url: string;
-}
+import { Label } from '../types'; // Import consolidated types
 
 interface LabelsProps {
-  labels: Label[];
+  labels?: Label[];
 }
 
 const Labels: React.FC<LabelsProps> = ({ labels }) => {
   return (
-    labels.length > 0 &&
+    labels && labels?.length > 0 &&
     <div className={styles.labels}>
       {labels.map(label => 
         {console.log(label.color)

@@ -6,14 +6,7 @@ import styles from './SettingsPane.module.css';
 import GearIcon from '../assets/gear.svg?react';
 import CloseIcon from '../assets/close.svg?react';
 import RateLimit from '../RateLimit';
-
-interface SettingsPaneProps {
-    labelFilters: string[];
-    setLabelFilters: any;
-    allLabels: string[];
-    prioritizedRepos: string[];
-    setPrioritizedRepos: (repos: string[]) => void;
-}
+import { SettingsPaneProps } from '../types'; // Import consolidated types
 
 const SettingsPane: React.FC<SettingsPaneProps> = ({ labelFilters, setLabelFilters, allLabels, prioritizedRepos, setPrioritizedRepos }) => {
     const [isVisible, setIsVisible] = useState(false);
