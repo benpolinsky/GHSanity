@@ -35,9 +35,8 @@
   /* align-items: center; */
   font-size: 1em;
   color: #e0e0e0;
-  margin-bottom: 10px; /* Add margin for spacing */
-  border-bottom: 1px solid #3e3e3e; /* Add line separator */
-  padding-bottom: 5px; /* Add padding for spacing */
+  margin-bottom: 0px; /* Add margin for spacing */
+  padding-bottom: 0px; /* Add padding for spacing */
 }
 
 .doneButton {
@@ -83,6 +82,8 @@
 }
 
 .notificationMain {
+  display:flex;
+  align-items: center;
   flex: 5;
 }
 
@@ -153,4 +154,46 @@
   padding: 2px 5px;
   border-radius: 3px;
   font-size: 0.8em;
+}
+
+.globalActions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.globalActions button {
+  background: none;
+  border: 1px solid #3e3e3e;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #e0e0e0;
+}
+
+.globalActions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.selectButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #03dac6;
+  font-size: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px; /* Add margin for spacing */
+  padding-bottom: 5px; /* Add padding for spacing */
+}
+
+.selectButton:hover {
+  color: #018786;
 }

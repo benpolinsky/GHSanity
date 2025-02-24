@@ -26,8 +26,10 @@ export interface Notification {
 export interface NotificationItemProps {
   notification: Notification;
   doneNotifications: Set<string>;
-  markNotificationAsDone: (id: string) => void;
+  markNotificationAsDone: (id: string) => Promise<void>;
   getWebsiteUrl: (apiUrl: string) => string;
+  toggleNotificationSelection: (id: string) => void;
+  isSelected: boolean;
 }
 
 export interface NotificationListProps {

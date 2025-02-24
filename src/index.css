@@ -80,7 +80,7 @@ button {
   background-color: #e1ccfb;
   color: #121212;
   border: none;
-  padding: 10px 20px;
+  padding: 5px 0px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;

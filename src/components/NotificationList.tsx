@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { markNotificationAsRead, markRepoNotificationsAsRead } from '../api/github';
+import { markNotificationAsRead } from '../api/github';
 import styles from './NotificationList.module.css';
 import NotificationItem from './NotificationItem';
 import { Notification, NotificationListProps } from '../types'; // Import consolidated types
 
 const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter }) => {
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
-  const [doneRepos, setDoneRepos] = useState<Set<string>>(new Set());
+  const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
 
   const getWebsiteUrl = (apiUrl: string) => {
     return apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
@@ -25,16 +25,51 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     }
   };
 
-  const markRepoAsDone = async (repoName: string) => {
-    try {
-      const response = await markRepoNotificationsAsRead(token, repoName);
-      if (response.status === 205) {
-        setDoneRepos(new Set(doneRepos).add(repoName));
-      } else {
-        console.error('Failed to mark repo notifications as done', response);
-      }
-    } catch (err) {
-      console.error('Failed to mark repo notifications as done', err);
+  const toggleNotificationSelection = (id: string) => {
+    const newSelectedNotifications = new Set(selectedNotifications);
+    if (newSelectedNotifications.has(id)) {
+      newSelectedNotifications.delete(id);
+    } else {
+      newSelectedNotifications.add(id);
+    }
+    setSelectedNotifications(newSelectedNotifications);
+  };
+
+  const markSelectedAsDone = async () => {
+    for (const id of selectedNotifications) {
+      await markNotificationAsDone(id);
+    }
+    setSelectedNotifications(new Set());
+  };
+
+  const selectAllNotifications = () => {
+    const allNotificationIds = new Set(filteredNotifications.map(notification => notification.id));
+    setSelectedNotifications(allNotificationIds);
+  };
+
+  const deselectAllNotifications = () => {
+    setSelectedNotifications(new Set());
+  };
+
+  const toggleRepoSelection = (repoName: string) => {
+    const repoNotifications = groupedNotifications[repoName].map(notification => notification.id);
+    const newSelectedNotifications = new Set(selectedNotifications);
+    const allSelected = repoNotifications.every(id => newSelectedNotifications.has(id));
+
+    if (allSelected) {
+      repoNotifications.forEach(id => newSelectedNotifications.delete(id));
+    } else {
+      repoNotifications.forEach(id => newSelectedNotifications.add(id));
+    }
+
+    setSelectedNotifications(newSelectedNotifications);
+  };
+
+  const toggleGlobalSelection = () => {
+    if (selectedNotifications.size === filteredNotifications.length) {
+      deselectAllNotifications();
+    } else {
+      selectAllNotifications();
     }
   };
 
@@ -64,27 +99,43 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}
-      {!error && sortedRepoNames.map((repoName) => (
-        <div key={repoName} className={doneRepos.has(repoName) ? `${styles.done} ${styles.repo}` : styles.repo}>
-          <h2 className={styles.repoName}>
-            {repoName}
-            <button className={styles.doneButton} onClick={() => markRepoAsDone(repoName)}>
-              Mark all as read
-            </button>
-          </h2>
-          <ul className={styles.notificationItems}>
-            {groupedNotifications[repoName].map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                doneNotifications={doneNotifications}
-                markNotificationAsDone={markNotificationAsDone}
-                getWebsiteUrl={getWebsiteUrl}
-              />
-            ))}
-          </ul>
-        </div>
-      ))}
+      {!error && (
+        <>
+          <div className={styles.globalActions}>
+            <div className={styles.buttonGroup}>
+              <button onClick={toggleGlobalSelection}>
+                {selectedNotifications.size === filteredNotifications.length ? 'Deselect All' : 'Select All'}
+              </button>
+              <button onClick={markSelectedAsDone} disabled={selectedNotifications.size === 0}>
+                Mark Selected as Read
+              </button>
+            </div>
+          </div>
+          {sortedRepoNames.map((repoName) => (
+            <div key={repoName} className={styles.repo}>
+              <h2 className={styles.repoName}>
+                {repoName}
+              </h2>
+              <button className={styles.selectButton} onClick={() => toggleRepoSelection(repoName)}>
+                {groupedNotifications[repoName].every(notification => selectedNotifications.has(notification.id)) ? 'Deselect All' : 'Select All'}
+              </button>
+              <ul className={styles.notificationItems}>
+                {groupedNotifications[repoName].map((notification) => (
+                  <NotificationItem
+                    key={notification.id}
+                    notification={notification}
+                    doneNotifications={doneNotifications}
+                    markNotificationAsDone={markNotificationAsDone}
+                    getWebsiteUrl={getWebsiteUrl}
+                    toggleNotificationSelection={toggleNotificationSelection}
+                    isSelected={selectedNotifications.has(notification.id)}
+                  />
+                ))}
+              </ul>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 };

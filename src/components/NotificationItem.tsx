@@ -6,11 +6,16 @@ import MarkAsDoneIcon from '../assets/check.svg?react';
 import Labels from './Labels';
 import { NotificationItemProps } from '../types'; // Import consolidated types
 
-const NotificationItem: React.FC<NotificationItemProps> = ({ notification, doneNotifications, markNotificationAsDone, getWebsiteUrl }) => {
+const NotificationItem: React.FC<NotificationItemProps> = ({ notification, doneNotifications, markNotificationAsDone, getWebsiteUrl, toggleNotificationSelection, isSelected }) => {
   const Icon = notification.subject.type === 'PullRequest' ? PRIcon : IssueIcon;
 
   return (
     <li className={`${styles.notificationItem} ${doneNotifications.has(notification.id) ? styles.done : ''}`}>
+      <input
+        type="checkbox"
+        checked={isSelected}
+        onChange={() => toggleNotificationSelection(notification.id)}
+      />
       <span className={styles.notificationMain}>
         <Icon className={`${styles.typeIcon} ${notification.details.state?.toLowerCase() === "open" ? styles.iconOpen : styles.iconClosed}`}/>
         <a target="_blank" href={getWebsiteUrl(notification.subject.url)} className={styles.notificationLink}>{notification.subject.title}</a>
