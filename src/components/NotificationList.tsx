@@ -33,6 +33,11 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     }
   };
 
+  // Mark notification as read internally without API call
+  const markNotificationAsReadInternally = (id: string) => {
+    setDoneNotifications(prevDoneNotifications => new Set(prevDoneNotifications).add(id));
+  };
+
   const toggleNotificationSelection = (id: string) => {
     const newSelectedNotifications = new Set(selectedNotifications);
     if (newSelectedNotifications.has(id)) {
@@ -150,6 +155,7 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
                     notification={notification}
                     doneNotifications={doneNotifications}
                     markNotificationAsDone={markNotificationAsDone}
+                    markNotificationAsReadInternally={markNotificationAsReadInternally}
                     getWebsiteUrl={getWebsiteUrl}
                     toggleNotificationSelection={toggleNotificationSelection}
                     isSelected={selectedNotifications.has(notification.id)}
