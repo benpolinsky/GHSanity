@@ -1,7 +1,7 @@
 'use client';
 
 const GITHUB_API_URL = 'https://api.github.com';
-import { Notification } from '../types';
+import { Notification } from '../../types';
 
 // Helper function to parse Link header
 const parseLinkHeader = (linkHeader: string | null): Record<string, string> => {
