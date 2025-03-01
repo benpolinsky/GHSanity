@@ -1,18 +1,48 @@
 const GITHUB_API_URL = 'https://api.github.com';
+import { Notification } from '../types';
+
+// Helper function to parse Link header
+const parseLinkHeader = (linkHeader: string | null): Record<string, string> => {
+  if (!linkHeader) return {};
+  
+  return linkHeader.split(',').reduce((acc: Record<string, string>, link) => {
+    const match = link.match(/<([^>]+)>;\s*rel="([^"]+)"/);
+    if (match) {
+      acc[match[2]] = match[1];
+    }
+    return acc;
+  }, {});
+};
 
 export const getNotifications = async (token: string) => {
-  const response = await fetch(`${GITHUB_API_URL}/notifications`, {
-    headers: {
-      Authorization: `token ${token}`,
-      Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28'
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`);
+  let allNotifications: Notification[] = [];
+  let nextUrl = `${GITHUB_API_URL}/notifications?per_page=100`;
+  let status = 0;
+  
+  while (nextUrl) {
+    const response = await fetch(nextUrl, {
+      headers: {
+        Authorization: `token ${token}`,
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`);
+    }
+    
+    status = response.status;
+    const json = await response.json();
+    allNotifications = [...allNotifications, ...json];
+    
+    // Check for pagination links
+    const linkHeader = response.headers.get('Link');
+    const links = parseLinkHeader(linkHeader);
+    nextUrl = links['next'] || '';
   }
-  const json = await response.json();
-  return { json: json, status: response.status };
+  
+  return { json: allNotifications, status };
 };
 
 export const markNotificationAsRead = async (token: string, notificationId: string) => {

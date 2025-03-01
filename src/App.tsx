@@ -17,6 +17,7 @@ const App: React.FC = () => {
     "iTwin/coordinate-reference-system-service",
   ]);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { getNotificationDetails } = useNotificationDetails(token);
   const [filter, setFilter] = useState<ValidFilters | null>(null);
   const [additionalFilter, setAdditionalFilter] = useState<string | null>(null);
@@ -25,8 +26,10 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
+        setIsLoading(true);
         const data = await getNotifications(token);
         if (data.status === 200) {
+          console.log(`Fetched ${data.json.length} notifications in total`);
           const detailedNotifications = await Promise.all(
             data.json.map(async (notification: Notification) => {
               const details = await getNotificationDetails(
@@ -43,6 +46,8 @@ const App: React.FC = () => {
       } catch (err) {
         setError("Failed to fetch notifications");
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchNotifications().then(() => console.log("fetched"));
@@ -89,6 +94,7 @@ const App: React.FC = () => {
           filter={filter}
           additionalFilter={additionalFilter}
           stateFilter={stateFilter}
+          isLoading={isLoading}
         />
       </div>
     </>

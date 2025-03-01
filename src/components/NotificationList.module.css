@@ -17,6 +17,34 @@
     width: 100%;
 }
 
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.loadingContainer p {
+  margin-top: 16px;
+  color: #e0e0e0;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(3, 218, 198, 0.2);
+  border-radius: 50%;
+  border-top-color: #03dac6;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .error {
   color: #cf6679;
   background-color: #2e2e2e;

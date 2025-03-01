@@ -4,7 +4,7 @@ import styles from './NotificationList.module.css';
 import NotificationItem from './NotificationItem';
 import { Notification, NotificationListProps } from '../types'; // Import consolidated types
 
-const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter }) => {
+const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter, isLoading }) => {
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
   const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
 
@@ -103,11 +103,16 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   // Calculate total number of notifications
   const totalNotificationsCount = filteredNotifications.length;
 
-
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{error}</div>}
-      {!error && (
+      {isLoading && (
+        <div className={styles.loadingContainer}>
+          <div className={styles.loadingSpinner}></div>
+          <p>Loading all notifications...</p>
+        </div>
+      )}
+      {!error && !isLoading && (
         <>
           <div className={styles.globalActions}>
             <div className={styles.buttonGroup}>

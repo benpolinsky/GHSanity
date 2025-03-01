@@ -41,6 +41,7 @@ export interface NotificationListProps {
   filter: ValidFilters | null;
   additionalFilter: string | null;
   stateFilter: string;
+  isLoading: boolean;
 }
 
 export interface SettingsPaneProps {
