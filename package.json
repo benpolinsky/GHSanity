@@ -2,6 +2,7 @@
   "name": "gh-sanity",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,11 +14,12 @@
   "dependencies": {
     "@reach/combobox": "^0.18.0",
     "@testing-library/user-event": "^14.6.1",
-    "next": "^14.2.0",
+    "next": "^15.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.19.0",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^10.4.0",
@@ -27,11 +29,14 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.19.0",
-    "eslint-config-next": "^14.2.0",
+    "eslint": "^9.21.0",
+    "eslint-config-next": "^15.2.0",
+    "eslint-plugin-next": "^0.0.0",
     "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^16.0.0",
     "jsdom": "^26.0.0",
     "typescript": "~5.7.2",
+    "typescript-eslint": "^8.25.0",
     "vitest": "^3.0.7"
   }
 }

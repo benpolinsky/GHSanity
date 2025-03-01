@@ -11,7 +11,7 @@ vi.mock('@reach/combobox', () => ({
       {children}
     </div>
   ),
-  ComboboxInput: ({ value, onChange, placeholder }: { value: string, onChange: (e: any) => void, placeholder: string }) => (
+  ComboboxInput: ({ value, onChange, placeholder }: { value: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, placeholder: string }) => (
     <input
       data-testid="combobox-input"
       value={value}
@@ -36,7 +36,7 @@ describe('LabelFilter', () => {
   });
 
   it('renders with initial label filters', () => {
-    const { getByText, getAllByText, container } = render(<LabelFilter {...mockProps} />);
+    const { getByText, getAllByText } = render(<LabelFilter {...mockProps} />);
     
     expect(getByText('Label Filter')).toBeInTheDocument();
     

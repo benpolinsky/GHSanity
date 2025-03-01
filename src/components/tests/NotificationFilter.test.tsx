@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import NotificationFilter, { ValidFilters } from '../NotificationFilter';
+import NotificationFilter from '../NotificationFilter';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('NotificationFilter', () => {
