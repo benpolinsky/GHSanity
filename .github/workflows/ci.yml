@@ -45,7 +45,7 @@ jobs:
       run: pnpm tsc --noEmit
     
     - name: Lint
-      run: pnpm next lint --no-interactive
+      run: pnpm lint
     
     - name: Run tests
       run: pnpm test
