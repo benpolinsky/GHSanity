@@ -37,10 +37,11 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
 
   const markSelectedAsDone = async () => {
     const newDoneNotifications = new Set(doneNotifications);
-    for (const id of selectedNotifications) {
-      await markNotificationAsDone(id);
-      newDoneNotifications.add(id);
-    }
+    const markAsDonePromises = Array.from(selectedNotifications).map(id => markNotificationAsDone(id));
+    
+    await Promise.all(markAsDonePromises);
+    
+    selectedNotifications.forEach(id => newDoneNotifications.add(id));
     setDoneNotifications(newDoneNotifications);
     setSelectedNotifications(new Set());
   };
