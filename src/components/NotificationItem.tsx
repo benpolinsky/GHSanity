@@ -1,9 +1,8 @@
+'use client';
+
 import React from 'react';
 import styles from './NotificationList.module.css';
-import IssueIcon from '../assets/issue.svg?react';
-import PRIcon from '../assets/pr.svg?react';
-import ReleaseIcon from '../assets/release.svg?react'; // Import Release icon
-import MarkAsDoneIcon from '../assets/check.svg?react';
+import { IssueIcon, PRIcon, ReleaseIcon, CheckIcon } from './icons';
 import Labels from './Labels';
 import { NotificationItemProps } from '../types'; // Import consolidated types
 
@@ -41,7 +40,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         data-testid={`checkbox-${notification.id}`}
       />
       <span className={styles.notificationMain}>
-        <Icon className={`${styles.typeIcon} ${notification.details.state?.toLowerCase() === "open" ? styles.iconOpen : styles.iconClosed}`}/>
+        <Icon className={`${styles.typeIcon} ${notification.details.state?.toLowerCase() === "open" ? styles.iconOpen : styles.iconClosed}`} />
         <a 
           target="_blank" 
           href={getWebsiteUrl(notification.subject.url)} 
@@ -52,8 +51,12 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         </a>
         <Labels labels={notification.details.labels} />
       </span>
-      <button className={styles.itemDoneButton} data-testid={`mark-as-done-${notification.id}`}>
-        <MarkAsDoneIcon onClick={() => markNotificationAsDone(notification.id)} />
+      <button 
+        className={styles.itemDoneButton} 
+        onClick={() => markNotificationAsDone(notification.id)}
+        data-testid={`mark-as-done-${notification.id}`}
+      >
+        <CheckIcon />
       </button>
     </li>
   );

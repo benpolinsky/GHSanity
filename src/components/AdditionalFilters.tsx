@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import styles from './AdditionalFilters.module.css';
 import { Notification } from '../types'; // Import consolidated types

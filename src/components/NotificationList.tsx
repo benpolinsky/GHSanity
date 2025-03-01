@@ -1,8 +1,11 @@
+'use client';
+
 import React, { useState } from 'react';
-import { markNotificationAsRead } from '../api/github';
+
 import styles from './NotificationList.module.css';
 import NotificationItem from './NotificationItem';
 import { Notification, NotificationListProps } from '../types'; // Import consolidated types
+import { markNotificationAsRead } from '@/app/api/github';
 
 const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter, isLoading }) => {
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());

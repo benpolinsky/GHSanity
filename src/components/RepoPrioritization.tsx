@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { RepoPrioritizationProps } from '../types'; // Import consolidated types
 

@@ -1,6 +1,8 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import NotificationList from '../NotificationList';
 import { NotificationListProps } from '../../types';
+import { describe, expect, it, vi } from 'vitest';
 
 const mockProps: NotificationListProps = {
   token: 'test-token',
@@ -18,8 +20,15 @@ const mockProps: NotificationListProps = {
   error: null,
   filter: null,
   additionalFilter: null,
-  stateFilter: 'all'
+  stateFilter: 'all',
+  isLoading: false
 };
+
+// Mock the GitHub API calls
+vi.mock('../../api/github', () => ({
+  markNotificationAsRead: vi.fn().mockResolvedValue({ status: 205 }),
+  markRepoNotificationsAsRead: vi.fn().mockResolvedValue({ status: 205 })
+}));
 
 describe('NotificationList', () => {
   it('renders NotificationList and marks notification as done', async () => {
@@ -28,7 +37,7 @@ describe('NotificationList', () => {
     expect(getByText(/Test Issue/i)).toBeInTheDocument();
     
     const markAsReadButton = getByRole('button', { name: /Mark Selected as Read/i });
-    fireEvent.click(markAsReadButton);
+    await userEvent.click(markAsReadButton);
     
     // Assuming markNotificationAsRead is mocked to resolve with status 205
     expect(mockProps.notifications[0].details.state).toBe('open');

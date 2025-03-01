@@ -1,3 +1,5 @@
+'use client';
+
 const GITHUB_API_URL = 'https://api.github.com';
 import { Notification } from '../types';
 
@@ -26,6 +28,8 @@ export const getNotifications = async (token: string) => {
         Accept: 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28'
       },
+      // Add cache: 'no-store' to ensure fresh data
+      cache: 'no-store'
     });
     
     if (!response.ok) {
@@ -53,6 +57,7 @@ export const markNotificationAsRead = async (token: string, notificationId: stri
       Accept: 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
     },
+    cache: 'no-store'
   });
   if (!response.ok) {
     throw new Error(`Failed to mark notification as read: ${response.status} ${response.statusText}`);
@@ -74,6 +79,7 @@ export const markRepoNotificationsAsRead = async (token: string, repoFullName: s
       last_read_at: new Date().toISOString(),
       read: true,
     }),
+    cache: 'no-store'
   });
   if (!response.ok) {
     throw new Error(`Failed to mark repo notifications as read: ${response.status} ${response.statusText}`);

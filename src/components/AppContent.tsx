@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
-import NotificationList from "./components/NotificationList";
-import SettingsPane from "./components/SettingsPane";
-import NotificationFilter, { ValidFilters } from "./components/NotificationFilter";
-import AdditionalFilters from "./components/AdditionalFilters";
-import { getNotifications } from "@/app/api/github";
-import useNotificationDetails from "./hooks/useNotificationDetails";
-import styles from "./App.module.css";
-import { Notification } from './types'; // Import consolidated types
+'use client';
 
-const App: React.FC = () => {
-  const token = import.meta.env.GITHUB_TOKEN; // Use Vite environment variable for GitHub token
+import React, { useEffect, useState } from "react";
+import NotificationList from "./NotificationList";
+import SettingsPane from "./SettingsPane";
+import NotificationFilter, { ValidFilters } from "./NotificationFilter";
+import AdditionalFilters from "./AdditionalFilters";
+import { getNotifications } from "@/app/api/github";
+import useNotificationDetails from "../hooks/useNotificationDetails";
+import styles from "../App.module.css";
+import { Notification } from '../types';
+
+export const AppContent: React.FC = () => {
+  // Use Next.js environment variable instead of Vite's
+  const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN || '';
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [labelFilters, setLabelFilters] = useState<string[]>([]);
   const [prioritizedRepos, setPrioritizedRepos] = useState<string[]>([
@@ -66,39 +69,35 @@ const App: React.FC = () => {
   const allRepoNames = new Set(notifications.map((notification) => notification.repository.full_name))
 
   return (
-    <>
-      <div className={styles.appContainer}>
-        <div className={styles.filtersContainer}>
-          <NotificationFilter setFilter={setFilter} activeFilter={filter} />
-          <AdditionalFilters
-            setAdditionalFilter={setAdditionalFilter}
-            activeAdditionalFilter={additionalFilter}
-            notifications={notifications}
-            onFilterChange={setStateFilter}
-          />
-          <SettingsPane
-            allRepoNames={[...allRepoNames]}
-            labelFilters={labelFilters}
-            setLabelFilters={setLabelFilters}
-            allLabels={allLabels}
-            prioritizedRepos={prioritizedRepos}
-            setPrioritizedRepos={setPrioritizedRepos}
-          />
-        </div>
-        <NotificationList
-          token={token}
+    <div className={styles.appContainer}>
+      <div className={styles.filtersContainer}>
+        <NotificationFilter setFilter={setFilter} activeFilter={filter} />
+        <AdditionalFilters
+          setAdditionalFilter={setAdditionalFilter}
+          activeAdditionalFilter={additionalFilter}
           notifications={notifications}
+          onFilterChange={setStateFilter}
+        />
+        <SettingsPane
+          allRepoNames={[...allRepoNames]}
           labelFilters={labelFilters}
+          setLabelFilters={setLabelFilters}
+          allLabels={allLabels}
           prioritizedRepos={prioritizedRepos}
-          error={error}
-          filter={filter}
-          additionalFilter={additionalFilter}
-          stateFilter={stateFilter}
-          isLoading={isLoading}
+          setPrioritizedRepos={setPrioritizedRepos}
         />
       </div>
-    </>
+      <NotificationList
+        token={token}
+        notifications={notifications}
+        labelFilters={labelFilters}
+        prioritizedRepos={prioritizedRepos}
+        error={error}
+        filter={filter}
+        additionalFilter={additionalFilter}
+        stateFilter={stateFilter}
+        isLoading={isLoading}
+      />
+    </div>
   );
-};
-
-export default App;
+}; 

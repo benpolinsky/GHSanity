@@ -1,45 +1,70 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import App from '../../App';
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
+import { describe, it, expect, vi } from 'vitest';
+import { AppContent } from '../AppContent';
 
-describe('App', () => {
-  it('adds and removes repositories', () => {
-    const { getByPlaceholderText, getByText, queryByText, getByTestId } = render(<App />);
+// Mock the GitHub API calls
+vi.mock('../../api/github', () => ({
+  getNotifications: vi.fn().mockResolvedValue({ 
+    status: 200, 
+    json: [] 
+  })
+}));
+
+// Mock the notification details hook
+vi.mock('../../hooks/useNotificationDetails', () => ({
+  default: () => ({
+    getNotificationDetails: vi.fn().mockResolvedValue({})
+  })
+}));
+
+// Mock createPortal for testing
+vi.mock('react-dom', async () => {
+  const originalModule = await vi.importActual('react-dom');
+  return {
+    ...originalModule,
+    createPortal: (node: React.ReactNode) => node,
+  };
+});
+
+describe('AppContent', () => {
+  it('adds and removes repositories', async () => {
+    const { getByPlaceholderText, getByText, queryByText, getByTestId } = render(<AppContent />);
     
     const gearIcon = getByTestId('gear-icon');
-    fireEvent.click(gearIcon);
+    await userEvent.click(gearIcon);
 
     const input = getByPlaceholderText(/Enter or select a repository/i);
-    fireEvent.change(input, { target: { value: 'repo1' } });
+    await userEvent.type(input, 'repo1');
     
     const addButton = getByTestId('addRepo');
-    fireEvent.click(addButton);
+    await userEvent.click(addButton);
     
     expect(getByText('repo1')).toBeInTheDocument();
     
     const removeButton = getByTestId("removeRepo-repo1")
-    fireEvent.click(removeButton);
+    await userEvent.click(removeButton);
     
     expect(queryByText('repo1')).toBeNull();
   });
 
-  it('filters labels', () => {
-    const { getByPlaceholderText, getByText, getByRole, getByTestId, queryByText } = render(<App />);
+  it('filters labels', async () => {
+    const { getByPlaceholderText, getByText, getByRole, getByTestId, queryByText } = render(<AppContent />);
     
     const gearIcon = getByTestId('gear-icon');
-    fireEvent.click(gearIcon);
+    await userEvent.click(gearIcon);
 
     const labelFilterInput = getByPlaceholderText(/Exclude by label/i);
-    fireEvent.change(labelFilterInput, { target: { value: 'bug' } });
+    await userEvent.type(labelFilterInput, 'bug');
     
     const addLabelButton = getByTestId('addLabel');
-    fireEvent.click(addLabelButton);
+    await userEvent.click(addLabelButton);
     
     expect(getByText('bug')).toBeInTheDocument();
     
     const removeLabelButton = getByRole('button', { name: /x/i });
-    fireEvent.click(removeLabelButton);
+    await userEvent.click(removeLabelButton);
     
     expect(queryByText('bug')).toBeNull();
   });
