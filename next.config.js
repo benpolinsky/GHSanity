@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   env: {
     // Make environment variables available in the browser
-    NEXT_PUBLIC_GITHUB_TOKEN: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
+    NEXT_GH_TOKEN: process.env.NEXT_GH_TOKEN,
   },
   // Handle transpilation for external dependencies
   transpilePackages: ['@reach/combobox'],

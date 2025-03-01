@@ -12,7 +12,7 @@ import { Notification } from '../types';
 
 export const AppContent: React.FC = () => {
   // Use Next.js environment variable instead of Vite's
-  const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN || '';
+  const token = process.env.NEXT_GH_TOKEN || '';
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [labelFilters, setLabelFilters] = useState<string[]>([]);
   const [prioritizedRepos, setPrioritizedRepos] = useState<string[]>([
