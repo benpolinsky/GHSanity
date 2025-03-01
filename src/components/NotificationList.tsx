@@ -9,7 +9,15 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
 
   const getWebsiteUrl = (apiUrl: string) => {
-    return apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
+    // Convert API URL to website URL
+    const websiteUrl = apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
+    
+    // For issues and PRs, append a fragment to scroll to the bottom where latest comments are
+    if (apiUrl.includes('/issues/') || apiUrl.includes('/pulls/')) {
+      return `${websiteUrl}#partial-timeline`;
+    }
+    
+    return websiteUrl;
   };
 
   const markNotificationAsDone = async (id: string) => {

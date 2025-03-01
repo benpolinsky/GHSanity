@@ -7,7 +7,14 @@ import MarkAsDoneIcon from '../assets/check.svg?react';
 import Labels from './Labels';
 import { NotificationItemProps } from '../types'; // Import consolidated types
 
-const NotificationItem: React.FC<NotificationItemProps> = ({ notification, doneNotifications, markNotificationAsDone, getWebsiteUrl, toggleNotificationSelection, isSelected }) => {
+const NotificationItem: React.FC<NotificationItemProps> = ({ 
+  notification, 
+  doneNotifications, 
+  markNotificationAsDone, 
+  getWebsiteUrl, 
+  toggleNotificationSelection, 
+  isSelected 
+}) => {
   let Icon;
   if (notification.subject.type === 'PullRequest') {
     Icon = PRIcon;

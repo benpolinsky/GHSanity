@@ -66,3 +66,15 @@ export interface RepoPrioritizationProps {
 }
 
 export type ValidFilters = 'Issue' | 'PullRequest' | null;
+
+export interface GitHubComment {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  user: {
+    login: string;
+    id: number;
+  };
+  body: string;
+  html_url: string;
+}
