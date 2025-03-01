@@ -31,12 +31,35 @@
 
 .repoName {
   display: flex;
-  justify-content: space-between;
-  /* align-items: center; */
+  /* justify-content: space-between; */
+  align-items: center;
   font-size: 1em;
   color: #e0e0e0;
   margin-bottom: 0px; /* Add margin for spacing */
   padding-bottom: 0px; /* Add padding for spacing */
+}
+
+.repoNameText {
+  display: inline-flex;
+}
+
+.repoCount {
+  font-size: 0.9em;
+  color: #999;
+  margin-left: 8px;
+  font-weight: normal;
+}
+
+.notificationCount {
+  margin-left: 20px;
+  color: #e0e0e0;
+  display: flex;
+  align-items: center;
+}
+
+.notificationCount strong {
+  color: #03dac6;
+  margin-left: 5px;
 }
 
 .doneButton {

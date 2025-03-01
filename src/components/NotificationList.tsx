@@ -100,6 +100,9 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     return aPriority - bPriority;
   });
 
+  // Calculate total number of notifications
+  const totalNotificationsCount = filteredNotifications.length;
+
 
   return (
     <div className={styles.notificationList}>
@@ -115,11 +118,14 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
                 Mark Selected as Read
               </button>
             </div>
+            <div className={styles.notificationCount}>
+              Total Notifications: <strong>{totalNotificationsCount}</strong>
+            </div>
           </div>
           {sortedRepoNames.map((repoName) => (
             <div key={repoName} className={styles.repo}>
               <h2 className={styles.repoName}>
-                {repoName}
+                <span className={styles.repoNameText}>{repoName}</span> <span className={styles.repoCount}>({groupedNotifications[repoName].length})</span>
               </h2>
               <button className={styles.selectButton} onClick={() => toggleRepoSelection(repoName)}>
                 {groupedNotifications[repoName].every(notification => selectedNotifications.has(notification.id)) ? 'Deselect All' : 'Select All'}
