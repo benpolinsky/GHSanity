@@ -6,10 +6,9 @@ import LabelFilter from './LabelFilter';
 import RepoPrioritization from './RepoPrioritization';
 import styles from './SettingsPane.module.css';
 import { GearIcon, CloseIcon } from './icons';
-import RateLimit from '../RateLimit';
-import { SettingsPaneProps } from '../types'; // Import consolidated types
+import RateLimit from './RateLimit';
 
-const SettingsPane: React.FC<SettingsPaneProps> = ({ labelFilters, setLabelFilters, allLabels, prioritizedRepos, setPrioritizedRepos, allRepoNames }) => {
+const SettingsPane = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [mounted, setMounted] = useState(false);
 
@@ -27,10 +26,10 @@ const SettingsPane: React.FC<SettingsPaneProps> = ({ labelFilters, setLabelFilte
             <GearIcon className={styles.gearIcon} onClick={toggleVisibility} data-testid="gear-icon" />
             {isVisible && mounted && createPortal(
                 <div className={styles.overlay}>
-                    <div className={styles.settingsPane}>
-                        <CloseIcon onClick={toggleVisibility} className={styles.closeIcon} data-testid="close-icon" />
-                        <LabelFilter labelFilters={labelFilters} setLabelFilters={setLabelFilters} allLabels={allLabels} />
-                        <RepoPrioritization prioritizedRepos={prioritizedRepos} setPrioritizedRepos={setPrioritizedRepos} allRepoNames={allRepoNames} />
+                    <div className='settings-pane' data-testid='settings-pane'>
+                        <CloseIcon className={styles.closeIcon} onClick={toggleVisibility} data-testid="close-icon" />
+                        <LabelFilter />
+                        <RepoPrioritization />
                         <RateLimit />
                     </div>
                 </div>,

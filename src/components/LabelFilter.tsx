@@ -1,24 +1,38 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from '@reach/combobox';
 import '@reach/combobox/styles.css';
 import styles from './LabelFilter.module.css';
-import { LabelFilterProps } from '../types'; // Import consolidated types
+import { AppContext, AppDispatchContext } from '@/store/AppContext';
+import { Label } from '@/types';
 
-const LabelFilter: React.FC<LabelFilterProps> = ({ labelFilters, setLabelFilters, allLabels }) => {
+const LabelFilter = () => {
+  const { labelFilters, notifications } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext);
   const [inputValue, setInputValue] = useState('');
 
   const addLabelFilter = (label: string) => {
     if (label && !labelFilters.includes(label)) {
-      setLabelFilters([...labelFilters, label]);
+      dispatch({ type: "SET_LABEL_FILTERS", payload: [...labelFilters, label] });
     }
     setInputValue('');
   };
 
   const removeLabelFilter = (label: string) => {
-    setLabelFilters(labelFilters.filter(l => l !== label));
+    const lablesWithoutRemoved = labelFilters.filter(l => l !== label);
+    dispatch({ type: "SET_LABEL_FILTERS", payload: lablesWithoutRemoved })
   };
+
+  const allLabels: string[] = []
+
+  notifications.forEach((notification) => {
+    notification.details.labels?.forEach((label: Label) => {
+      if (!allLabels.includes(label.name)) {
+        allLabels.push(label.name)
+      }
+    })
+  })
 
   return (
     <div className={styles.labelFilter}>
@@ -32,12 +46,12 @@ const LabelFilter: React.FC<LabelFilterProps> = ({ labelFilters, setLabelFilters
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Exclude by label"
-            className={styles.comboboxInput} 
+            className={styles.comboboxInput}
           />
           <ComboboxPopover>
-            <ComboboxList className={styles.comboboxList}> 
+            <ComboboxList className={styles.comboboxList}>
               {allLabels.map(label => (
-                <ComboboxOption key={label} value={label} className={styles.comboboxOption} /> 
+                <ComboboxOption key={label} value={label} className={styles.comboboxOption} />
               ))}
             </ComboboxList>
           </ComboboxPopover>

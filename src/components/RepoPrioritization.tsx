@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
-import { RepoPrioritizationProps } from '../types'; // Import consolidated types
+import React, { useState, useContext } from 'react';
+import { AppContext, AppDispatchContext } from '@/store/AppContext';
 
-const RepoPrioritization: React.FC<RepoPrioritizationProps> = ({ prioritizedRepos, setPrioritizedRepos, allRepoNames }) => {
+const RepoPrioritization = () => {
+  const { prioritizedRepos, notifications } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext);
   const [inputValue, setInputValue] = useState('');
+  const allRepoNames = Array.from(new Set(notifications.map(notification => notification.repository.name)));
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -12,13 +15,13 @@ const RepoPrioritization: React.FC<RepoPrioritizationProps> = ({ prioritizedRepo
 
   const handleAddRepo = () => {
     if (inputValue && !prioritizedRepos.includes(inputValue)) {
-      setPrioritizedRepos([...prioritizedRepos, inputValue]);
+      dispatch({ type: "SET_PRIORITIZED_REPOS", payload: [...prioritizedRepos, inputValue] });
       setInputValue('');
     }
   };
 
   const handleRemoveRepo = (repo: string) => {
-    setPrioritizedRepos(prioritizedRepos.filter(r => r !== repo));
+    dispatch({ type: "SET_PRIORITIZED_REPOS", payload: prioritizedRepos.filter(r => r !== repo) });
   };
 
   return (
