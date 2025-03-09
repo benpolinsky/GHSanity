@@ -122,7 +122,7 @@ const NotificationList: React.FC = () => {
 
   return (
     <div className={styles.notificationList}>
-      {error && <div className={styles.error}>{error}</div>}
+      {error && <div className={styles.error}>{JSON.stringify(error)}</div>}
       {isLoading && (
         <div className={styles.loadingContainer}>
           <div className={styles.loadingSpinner}></div>
