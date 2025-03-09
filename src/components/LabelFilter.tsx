@@ -14,14 +14,14 @@ const LabelFilter = () => {
 
   const addLabelFilter = (label: string) => {
     if (label && !labelFilters.includes(label)) {
-      dispatch({ action: "SET_LABEL_FILTERS", payload: [...labelFilters, label] });
+      dispatch({ type: "SET_LABEL_FILTERS", payload: [...labelFilters, label] });
     }
     setInputValue('');
   };
 
   const removeLabelFilter = (label: string) => {
     const lablesWithoutRemoved = labelFilters.filter(l => l !== label);
-    dispatch({ action: "SET_LABEL_FILTERS", payload: lablesWithoutRemoved })
+    dispatch({ type: "SET_LABEL_FILTERS", payload: lablesWithoutRemoved })
   };
 
   const allLabels: string[] = []
