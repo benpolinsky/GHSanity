@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { getNotifications } from "@/app/api/github";
 import { Notification } from '../types';
 
-const useNotifications = (token: string, dispatch: React.Dispatch<any>) => {
+const useNotifications = (token: string, dispatch: any) => {
     const getNotificationDetails = useCallback(async (url: string) => {
         const response = await fetch(url, {
             headers: {
@@ -32,9 +32,10 @@ const useNotifications = (token: string, dispatch: React.Dispatch<any>) => {
         dispatch({ type: "SET_IS_LOADING", payload: isLoading });
     }, [dispatch]);
 
-    const setError = useCallback((error: string) => {
+    const setError = useCallback((errorStr: string, error?: unknown) => {
         dispatch({ type: "SET_ERROR", payload: error });
-        console.error(error);
+        if (error)
+            console.error(error);
     }, [dispatch]);
 
     const fetchNotifications = useCallback(async () => {
@@ -47,12 +48,12 @@ const useNotifications = (token: string, dispatch: React.Dispatch<any>) => {
             } else {
                 setError("Failed to fetch notifications");
             }
-        } catch (err) {
-            setError("Failed to fetch notifications");
+        } catch (err: unknown) {
+            setError("Failed to fetch notifications", err);
         } finally {
             setLoading(false);
         }
-    }, [token, getNotificationDetails, dispatch]);
+    }, [token, getNotificationDetails, dispatch, addDetails]);
 
     return { fetchNotifications };
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import LabelFilter from './LabelFilter';
 import RepoPrioritization from './RepoPrioritization';

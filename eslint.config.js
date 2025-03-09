@@ -17,6 +17,7 @@ const configs = [
     rules: {
       'react/no-unescaped-entities': 'off',
       'react/display-name': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 ]
