@@ -7,7 +7,7 @@ const RepoPrioritization = () => {
   const { prioritizedRepos, notifications } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const [inputValue, setInputValue] = useState('');
-  const allRepoNames = Array.from(new Set(notifications.map(notification => notification.repository.name)));
+  const allRepoNames = Array.from(new Set(notifications.map(notification => notification.repository.full_name)));
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);

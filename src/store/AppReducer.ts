@@ -1,7 +1,8 @@
 import { Store } from "./AppStorage";
+import type { Notification } from "@/types";
 
 export type State = {
-    notifications: any[];
+    notifications: Notification[];
     labelFilters: any[];
     prioritizedRepos: string[];
     error: string | null;
@@ -31,14 +32,17 @@ type actions = "SET_NOTIFICATIONS" | "SET_LABEL_FILTERS" | "SET_PRIORITIZED_REPO
 
 export const makeReducer = (store: Store<Pick<State, "prioritizedRepos" | "labelFilters">>) => (state: State, action: action) => {
     let newState = state;
+    let updateSettings = false;
     switch (action.type) {
         case "SET_NOTIFICATIONS":
             newState = { ...state, notifications: action.payload };
             break;
         case "SET_LABEL_FILTERS":
+            updateSettings = true;
             newState = { ...state, labelFilters: action.payload };
             break;
         case "SET_PRIORITIZED_REPOS":
+            updateSettings = true;
             newState = { ...state, prioritizedRepos: action.payload };
             break;
         case "SET_ERROR":
@@ -59,9 +63,10 @@ export const makeReducer = (store: Store<Pick<State, "prioritizedRepos" | "label
         default:
             break;
     }
+    if (updateSettings) {
+        const { labelFilters, prioritizedRepos } = newState;
+        store.save({ labelFilters, prioritizedRepos })
+    }
 
-    const { labelFilters, prioritizedRepos } = newState;
-
-    store.save({ labelFilters, prioritizedRepos })
     return newState;
 };

@@ -10,7 +10,6 @@ const RateLimit: React.FC = () => {
       try {
         const response = await fetch('https://api.github.com/rate_limit');
         const data = await response.json();
-        console.log(data)
         setRateLimit(data.rate);
       } catch (error) {
         console.error('Error fetching rate limit:', error);

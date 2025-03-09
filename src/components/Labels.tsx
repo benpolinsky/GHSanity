@@ -12,9 +12,9 @@ const Labels: React.FC<LabelsProps> = ({ labels }) => {
   return (
     labels && labels?.length > 0 &&
     <div className={styles.labels}>
-      {labels.map(label => 
-        {console.log(label.color)
-          return <span key={label.id} className={styles.label}>{label.name}</span>}
+      {labels.map(label => {
+        return <span key={label.id} className={styles.label}>{label.name}</span>
+      }
       )}
     </div>
   );

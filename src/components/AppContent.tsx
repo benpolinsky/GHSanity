@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useMemo, useReducer } from "react";
 import NotificationList from "./NotificationList";
 import SettingsPane from "./SettingsPane";
 import NotificationFilter from "./NotificationFilter";
@@ -13,23 +13,24 @@ import { LocalStorageStore } from "@/store/AppStorage";
 
 export const AppContent: React.FC = () => {
   const token = process.env.NEXT_GH_TOKEN || '';
-  const store = new LocalStorageStore();
+  const store = useMemo(() => new LocalStorageStore(), [])
   const reducer = makeReducer(store);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { fetchNotifications } = useNotifications(token, dispatch);
 
   useEffect(() => {
-    // createGist(token, "GISTONE.json", "COOLSTUFF").then(r => console.log(r))
-    // loadAllGists(token).then(() => { })
     fetchNotifications().then(() => console.log("fetched"));
   }, []);
 
   useEffect(() => {
-    const savedState = store.load();
-    if (savedState) {
-      dispatch({ type: "SET_PRIORITIZED_REPOS", payload: savedState.prioritizedRepos });
-      dispatch({ type: "SET_LABEL_FILTERS", payload: savedState.labelFilters });
+    async function loadFromStore() {
+      const savedState = store.load();
+      if (savedState) {
+        dispatch({ type: "SET_PRIORITIZED_REPOS", payload: savedState.prioritizedRepos });
+        dispatch({ type: "SET_LABEL_FILTERS", payload: savedState.labelFilters });
+      }
     }
+    loadFromStore()
   }, [])
 
   return (

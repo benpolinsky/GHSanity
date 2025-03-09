@@ -1,7 +1,7 @@
 export interface Label {
   id: number;
   name: string;
-  color: string; 
+  color: string;
   description: string;
   url: string;
 }
@@ -11,6 +11,7 @@ export interface Notification {
   reason: string;
   repository: {
     full_name: string;
+    name: string;
   };
   subject: {
     title: string;
