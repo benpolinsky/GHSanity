@@ -1,21 +1,21 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './NotificationFilter.module.css';
+import { AppContext, AppDispatchContext } from '@/store/AppContext';
 
 export type ValidFilters = 'PullRequest' | 'Issue';
 
-interface NotificationFilterProps {
-  setFilter: React.Dispatch<React.SetStateAction<ValidFilters | null>>;
-  activeFilter: ValidFilters | null;
-}
+const NotificationFilter = () => {
+  const { filter } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext);
+  const dispatchFilter = (filter: ValidFilters | null) => dispatch({ type: 'SET_FILTER', payload: filter });
 
-const NotificationFilter: React.FC<NotificationFilterProps> = ({ setFilter, activeFilter }) => {
   return (
     <div className={styles.filterLinks}>
-      <a href="#" className={activeFilter === null ? styles.active : ""} onClick={() => setFilter(null)}>All</a>
-      <a href="#" className={activeFilter === "PullRequest" ? styles.active : ""} onClick={() => setFilter('PullRequest')}>Pull Requests</a>
-      <a href="#" className={activeFilter === "Issue" ? styles.active : ""} onClick={() => setFilter('Issue')}>Issues</a>
+      <a href="#" className={filter === null ? styles.active : ""} onClick={() => dispatchFilter(null)}>All</a>
+      <a href="#" className={filter === "PullRequest" ? styles.active : ""} onClick={() => dispatchFilter('PullRequest')}>Pull Requests</a>
+      <a href="#" className={filter === "Issue" ? styles.active : ""} onClick={() => dispatchFilter('Issue')}>Issues</a>
     </div>
   );
 };

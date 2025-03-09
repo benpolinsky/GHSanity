@@ -1,31 +1,32 @@
 'use client';
 
-import React, { useState } from 'react';
-
+import React, { useState, useContext } from 'react';
 import styles from './NotificationList.module.css';
 import NotificationItem from './NotificationItem';
-import { Notification, NotificationListProps } from '../types'; // Import consolidated types
+import { Label, Notification } from '../types'; // Import consolidated types
 import { markNotificationAsRead } from '@/app/api/github';
+import { AppContext } from '@/store/AppContext';
 
-const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter, isLoading }) => {
+const NotificationList: React.FC = () => {
+  const { notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter, isLoading } = useContext(AppContext);
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
   const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
 
   const getWebsiteUrl = (apiUrl: string) => {
     // Convert API URL to website URL
     const websiteUrl = apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
-    
+
     // For issues and PRs, append a fragment to scroll to the bottom where latest comments are
     if (apiUrl.includes('/issues/') || apiUrl.includes('/pulls/')) {
       return `${websiteUrl}#partial-timeline`;
     }
-    
+
     return websiteUrl;
   };
 
   const markNotificationAsDone = async (id: string) => {
     try {
-      const response = await markNotificationAsRead(token, id);
+      const response = await markNotificationAsRead(id);
       if (response.status === 205) {
         setDoneNotifications(prevDoneNotifications => new Set(prevDoneNotifications).add(id));
       } else {
@@ -54,9 +55,9 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   const markSelectedAsDone = async () => {
     const newDoneNotifications = new Set(doneNotifications);
     const markAsDonePromises = Array.from(selectedNotifications).map(id => markNotificationAsDone(id));
-    
+
     await Promise.all(markAsDonePromises);
-    
+
     selectedNotifications.forEach(id => newDoneNotifications.add(id));
     setDoneNotifications(newDoneNotifications);
     setSelectedNotifications(new Set());
@@ -72,14 +73,14 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   };
 
   const toggleRepoSelection = (repoName: string) => {
-    const repoNotifications = groupedNotifications[repoName].map(notification => notification.id);
+    const repoNotifications = groupedNotifications[repoName].map((notification: Notification) => notification.id);
     const newSelectedNotifications = new Set(selectedNotifications);
-    const allSelected = repoNotifications.every(id => newSelectedNotifications.has(id));
+    const allSelected = repoNotifications.every((id: string) => newSelectedNotifications.has(id));
 
     if (allSelected) {
-      repoNotifications.forEach(id => newSelectedNotifications.delete(id));
+      repoNotifications.forEach((id: string) => newSelectedNotifications.delete(id));
     } else {
-      repoNotifications.forEach(id => newSelectedNotifications.add(id));
+      repoNotifications.forEach((id: string) => newSelectedNotifications.add(id));
     }
 
     setSelectedNotifications(newSelectedNotifications);
@@ -97,7 +98,7 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     const matchesType = filter ? notification.subject.type === filter : true;
     const matchesAdditionalFilter = additionalFilter ? notification.reason === additionalFilter : true;
     const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state?.includes('closed') : notification.details.state?.includes('closed'));
-    const labelExcludes = notification.details.labels?.some(label => labelFilters.includes(label.name));
+    const labelExcludes = notification.details.labels?.some((label: Label) => labelFilters.includes(label.name));
     return matchesType && matchesAdditionalFilter && matchesState && !labelExcludes;
   });
 
@@ -149,10 +150,10 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
                 <span className={styles.repoNameText}>{repoName}</span> <span className={styles.repoCount}>({groupedNotifications[repoName].length})</span>
               </h2>
               <button className={styles.selectButton} onClick={() => toggleRepoSelection(repoName)}>
-                {groupedNotifications[repoName].every(notification => selectedNotifications.has(notification.id)) ? 'Deselect All' : 'Select All'}
+                {groupedNotifications[repoName].every((notification: Notification) => selectedNotifications.has(notification.id)) ? 'Deselect All' : 'Select All'}
               </button>
               <ul className={styles.notificationItems}>
-                {groupedNotifications[repoName].map((notification) => (
+                {groupedNotifications[repoName].map((notification: Notification) => (
                   <NotificationItem
                     key={notification.id}
                     notification={notification}

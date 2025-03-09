@@ -1,18 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import styles from './AdditionalFilters.module.css';
-import { Notification } from '../types'; // Import consolidated types
+import { AppContext, AppDispatchContext } from '@/store/AppContext';
 
-interface AdditionalFiltersProps {
-  setAdditionalFilter: React.Dispatch<React.SetStateAction<string | null>>;
-  activeAdditionalFilter: string | null;
-  notifications: Notification[];
-  onFilterChange: (state: string) => void; // Add onFilterChange prop
-}
-
-const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({ setAdditionalFilter, activeAdditionalFilter, notifications, onFilterChange }) => {
-  console.log('Notifications:', notifications); // Debug log
+const SelectFilter: React.FC<{ filter: string | null, label: string }> = ({ filter, label }) => {
+  const { additionalFilter, notifications } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext);
 
   const filterCounts = notifications.reduce((acc, notification) => {
     const reason = notification.reason
@@ -20,38 +14,37 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({ setAdditionalFilt
     return acc;
   }, {} as Record<string, number>);
 
-  console.log('Filter Counts:', filterCounts); // Debug log
+  const handleFilterChange = (filter: string | null) => {
+    dispatch({ type: "SET_ADDITIONAL_FILTER", payload: filter });
+  };
 
-  const [state, setState] = useState('open');
+  return (
+    <a href="#" className={additionalFilter === filter ? styles.active : ""} onClick={() => handleFilterChange(filter)}>
+      {label} {filterCounts[filter!] ? `(${filterCounts[filter!]})` : ''}
+    </a>
+  );
+};
+
+const AdditionalFilters = () => {
+  const { stateFilter } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext);
 
   const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setState(event.target.value);
-    onFilterChange(event.target.value); // Call onFilterChange
+    dispatch({ type: "SET_STATE_FILTER", payload: event.target.value }); // Call dispatch
   };
 
   return (
     <div className={styles.filterLinks}>
-      <a href="#" className={activeAdditionalFilter === null ? styles.active : ""} onClick={() => setAdditionalFilter(null)}>
-        All
-      </a>
-      <a href="#" className={activeAdditionalFilter === "assign" ? styles.active : ""} onClick={() => setAdditionalFilter('assign')}>
-        Assigned {filterCounts['assign'] ? `(${filterCounts['assign']})` : ''}
-      </a>
-      <a href="#" className={activeAdditionalFilter === "participating" ? styles.active : ""} onClick={() => setAdditionalFilter('participating')}>
-        Participating {filterCounts['participating'] ? `(${filterCounts['participating']})` : ''}
-      </a>
-      <a href="#" className={activeAdditionalFilter === "mention" ? styles.active : ""} onClick={() => setAdditionalFilter('mention')}>
-        Mentioned {filterCounts['mention'] ? `(${filterCounts['mention']})` : ''}
-      </a>
-      <a href="#" className={activeAdditionalFilter === "team_mention" ? styles.active : ""} onClick={() => setAdditionalFilter('team_mention')}>
-        Team Mentioned {filterCounts['team_mention'] ? `(${filterCounts['team_mention']})` : ''}
-      </a>
-      <a href="#" className={activeAdditionalFilter === "review_requested" ? styles.active : ""} onClick={() => setAdditionalFilter('review_requested')}>
-        Review Requested {filterCounts['review_requested'] ? `(${filterCounts['review_requested']})` : ''}
-      </a>
+      <SelectFilter filter={null} label="All" />
+      <SelectFilter filter="assign" label="Assigned" />
+      <SelectFilter filter="participating" label="Participating" />
+      <SelectFilter filter="mention" label="Mentioned" />
+      <SelectFilter filter="team_mention" label="Team Mentioned" />
+      <SelectFilter filter="review_requested" label="Review Requested" />
+
       <div>
         <label htmlFor="stateFilter">State:</label>
-        <select id="stateFilter" value={state} onChange={handleStateChange}>
+        <select id="stateFilter" value={stateFilter} onChange={handleStateChange}>
           <option value="all">All</option>
           <option value="open">Open</option>
           <option value="closed">Closed</option>
