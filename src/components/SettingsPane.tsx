@@ -6,7 +6,7 @@ import LabelFilter from './LabelFilter';
 import RepoPrioritization from './RepoPrioritization';
 import styles from './SettingsPane.module.css';
 import { GearIcon, CloseIcon } from './icons';
-import RateLimit from '../RateLimit';
+import RateLimit from './RateLimit';
 
 const SettingsPane = () => {
     const [isVisible, setIsVisible] = useState(false);
