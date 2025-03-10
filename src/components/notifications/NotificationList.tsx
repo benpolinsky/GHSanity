@@ -100,9 +100,9 @@ const NotificationList: React.FC = () => {
   }, {} as Record<string, Notification[]>);
 
   const sortedRepoNames = Object.keys(groupedNotifications).sort((a, b) => {
-    const aPriority = prioritizedRepos.includes(a) ? 0 : 1;
-    const bPriority = prioritizedRepos.includes(b) ? 0 : 1;
-    return aPriority - bPriority;
+    const aPriority = prioritizedRepos.indexOf(a);
+    const bPriority = prioritizedRepos.indexOf(b);
+    return (aPriority === -1 ? Infinity : aPriority) - (bPriority === -1 ? Infinity : bPriority);
   });
 
   // Calculate total number of notifications
@@ -134,12 +134,13 @@ const NotificationList: React.FC = () => {
           </div>
           {sortedRepoNames.map((repoName) => (
             <div key={repoName} className={styles.repo}>
-              <h2 className={styles.repoName}>
-                <span className={styles.repoNameText}>{repoName}</span> <span className={styles.repoCount}>({groupedNotifications[repoName].length})</span>
-              </h2>
-              <button className={styles.selectButton} onClick={() => toggleRepoSelection(repoName)}>
-                {groupedNotifications[repoName].every((notification: Notification) => selectedNotifications.has(notification.id)) ? 'Deselect All' : 'Select All'}
-              </button>
+              <RepInfo
+                notificationCount={groupedNotifications[repoName].length}
+                toggleAllFn={() => toggleRepoSelection(repoName)}
+                toggleLabel={groupedNotifications[repoName].every((notification: Notification) => selectedNotifications.has(notification.id)) ? 'Deselect All' : 'Select All'}
+                repoName={repoName}
+              />
+
               <ul className={styles.notificationItems}>
                 {groupedNotifications[repoName].map((notification: Notification) => (
                   <NotificationItem
@@ -162,3 +163,23 @@ const NotificationList: React.FC = () => {
 };
 
 export default NotificationList;
+
+interface RepoInfoProps {
+  repoName: string;
+  notificationCount: number;
+  toggleAllFn: () => void;
+  toggleLabel: string;
+}
+
+const RepInfo = ({ repoName, notificationCount, toggleAllFn, toggleLabel }: RepoInfoProps) => {
+  return <>
+    <h2 className={styles.repoName}>
+      <a href={`https://github.com/${repoName}`} target='_blank' rel='noreferrer'>
+        <span className={styles.repoNameText}>{repoName}</span> <span className={styles.repoCount}>({notificationCount})</span>
+      </a>
+    </h2>
+    <button className={styles.selectButton} onClick={() => toggleAllFn()}>
+      {toggleLabel}
+    </button>
+  </>
+}
