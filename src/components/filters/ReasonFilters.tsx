@@ -25,14 +25,14 @@ const ReasonFilters = () => {
   const { notifications } = useContext(AppContext);
 
   const filterCounts = notifications.reduce((acc, notification) => {
-    const _isParticipating = isParticipating(notification.reason)
     const reason = notification.reason
-
     acc[reason] = (acc[reason] || 0) + 1;
 
+    const _isParticipating = isParticipating(reason)
     if (_isParticipating) {
       acc['participating'] = (acc['participating'] || 0) + 1;
     }
+
     return acc;
   }, {} as Record<ReasonFilter | NotificationReason, number>);
 

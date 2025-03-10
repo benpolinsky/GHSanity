@@ -11,8 +11,7 @@
 }
 
 .active {
-  background: #03dac6;
-  color: #121212;
+  color: #03dac6 !important;
   border: none;
 }
 

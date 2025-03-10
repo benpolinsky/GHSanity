@@ -15,8 +15,7 @@
 }
 
 .filtersContainer {
-  flex: 0 0 50px; /* Set the width to 50px */
-  margin-right: 20px;
+  flex: 0 0 80px; /* Set the width to 50px */
 }
 
 .notificationList {

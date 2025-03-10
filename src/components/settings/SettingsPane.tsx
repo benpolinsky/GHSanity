@@ -38,12 +38,13 @@ const SettingsPane = () => {
         };
     }, [isVisible]);
 
+
     const toggleVisibility = () => {
         setIsVisible(!isVisible);
     };
 
     return (
-        <div>
+        <div className={styles.settingsIconPosition}>
             <GearIcon className={styles.gearIcon} onClick={toggleVisibility} data-testid="gear-icon" />
             {isVisible && mounted && createPortal(
                 <div className={styles.overlay}>

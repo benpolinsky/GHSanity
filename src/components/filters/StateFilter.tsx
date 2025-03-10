@@ -9,7 +9,6 @@ export const StateFilter = () => {
     };
 
     return <div>
-        <label htmlFor="stateFilter">State:</label>
         <select id="stateFilter" value={stateFilter} onChange={handleStateChange}>
             <option value="all">All</option>
             <option value="open">Open</option>

@@ -36,9 +36,9 @@ export const AppContent: React.FC = () => {
     <AppContext.Provider value={state}>
       <AppDispatchContext.Provider value={dispatch}>
         <div className={styles.appContainer}>
+          <SettingsPane />
           <div className={styles.filtersContainer}>
             <Filters />
-            <SettingsPane />
           </div>
           <NotificationList />
         </div>
