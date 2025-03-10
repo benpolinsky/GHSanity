@@ -3,7 +3,7 @@
 import React from 'react';
 import { Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from '@reach/combobox';
 import '@reach/combobox/styles.css';
-import styles from './ComboBoxContainer.module.css';
+import styles from './ComboboxContainer.module.css';
 
 interface ComboboxContainerProps {
     inputValue: string;
