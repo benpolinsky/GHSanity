@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useContext, useState } from 'react';
-import { Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from '@reach/combobox';
-import '@reach/combobox/styles.css';
-import styles from './LabelFilter.module.css';
 import { AppContext, AppDispatchContext } from '@/store/AppContext';
 import { Label } from '@/types';
+import ComboboxComponent from './ComboboxComponent';
+import Token from './Token';
+import styles from './LabelFilter.module.css';
 
 const LabelFilter = () => {
   const { labelFilters, notifications } = useContext(AppContext);
@@ -36,34 +36,20 @@ const LabelFilter = () => {
 
   return (
     <div className={styles.labelFilter}>
-      <p id="label-filter">Label Filter</p>
+      <p id="label-filter">Exclude notifications by label</p>
       <div className={styles.comboboxContainer}>
-        <Combobox
+        <ComboboxComponent
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          options={allLabels}
           onSelect={addLabelFilter}
-          aria-labelledby="label-filter"
-        >
-          <ComboboxInput
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Exclude by label"
-            className={styles.comboboxInput}
-          />
-          <ComboboxPopover>
-            <ComboboxList className={styles.comboboxList}>
-              {allLabels.map(label => (
-                <ComboboxOption key={label} value={label} className={styles.comboboxOption} />
-              ))}
-            </ComboboxList>
-          </ComboboxPopover>
-        </Combobox>
-        <button data-testid="addLabel" onClick={() => addLabelFilter(inputValue)} className={styles.addButton}>Add</button>
+          placeholder="Select and press enter"
+          buttonText="Add"
+        />
       </div>
       <div className={styles.selectedLabels}>
         {labelFilters.map(label => (
-          <span key={label} className={styles.label}>
-            {label}
-            <button onClick={() => removeLabelFilter(label)} className={styles.removeButton}>x</button>
-          </span>
+          <Token key={label} text={label} onRemove={() => removeLabelFilter(label)} />
         ))}
       </div>
     </div>

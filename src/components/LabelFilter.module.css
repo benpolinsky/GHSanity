@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .selectedLabels {
@@ -63,7 +64,11 @@
 
 .comboboxContainer {
   display: flex;
-  align-items: center;
+  width: 100%;
+}
+
+.comboboxContainer div, .comboboxContainer input {
+  width: 100%;
 }
 
 .addButton {
@@ -75,4 +80,18 @@
 
 .addButton:hover {
   background-color: #0056b3;
+}
+
+.token {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.tokenContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }

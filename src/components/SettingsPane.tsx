@@ -26,7 +26,7 @@ const SettingsPane = () => {
             <GearIcon className={styles.gearIcon} onClick={toggleVisibility} data-testid="gear-icon" />
             {isVisible && mounted && createPortal(
                 <div className={styles.overlay}>
-                    <div className='settings-pane' data-testid='settings-pane'>
+                    <div className={styles.settingsPane} data-testid='settings-pane'>
                         <CloseIcon className={styles.closeIcon} onClick={toggleVisibility} data-testid="close-icon" />
                         <LabelFilter />
                         <RepoPrioritization />

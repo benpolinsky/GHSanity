@@ -55,3 +55,9 @@
     float: right;
 }
 
+.settingsPane {
+    min-width: 100vw;
+    min-height: 50vh;
+    background: black;
+    padding: 50px;
+}

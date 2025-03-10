@@ -2,6 +2,11 @@
 
 import React, { useState, useContext } from 'react';
 import { AppContext, AppDispatchContext } from '@/store/AppContext';
+import ComboboxComponent from './ComboboxComponent';
+import Token from './Token';
+import TokenContainer from './TokenContainer'; // Import the new component
+import styles from './LabelFilter.module.css'; // Use existing styles
+import '@reach/combobox/styles.css';
 
 const RepoPrioritization = () => {
   const { prioritizedRepos, notifications } = useContext(AppContext);
@@ -13,9 +18,9 @@ const RepoPrioritization = () => {
     setInputValue(event.target.value);
   };
 
-  const handleAddRepo = () => {
-    if (inputValue && !prioritizedRepos.includes(inputValue)) {
-      dispatch({ type: "SET_PRIORITIZED_REPOS", payload: [...prioritizedRepos, inputValue] });
+  const handleAddRepo = (repo: string) => {
+    if (repo && !prioritizedRepos.includes(repo)) {
+      dispatch({ type: "SET_PRIORITIZED_REPOS", payload: [...prioritizedRepos, repo] });
       setInputValue('');
     }
   };
@@ -26,27 +31,18 @@ const RepoPrioritization = () => {
 
   return (
     <div>
-      <h3>Prioritize Repositories</h3>
-      <input
-        list="repo-names"
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder="Enter or select a repository"
-      />
-      <datalist id="repo-names">
-        {allRepoNames.map(repoName => (
-          <option key={repoName} value={repoName} />
-        ))}
-      </datalist>
-      <button data-testid="addRepo" onClick={handleAddRepo}>Add</button>
-      <ul>
-        {prioritizedRepos.map(repo => (
-          <li key={repo}>
-            {repo}
-            <button data-testid={`removeRepo-${repo}`} onClick={() => handleRemoveRepo(repo)}>Remove</button>
-          </li>
-        ))}
-      </ul>
+      <p>Prioritize Repositories</p>
+      <div>
+        <ComboboxComponent
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          options={allRepoNames}
+          onSelect={handleAddRepo} // Fix the onSelect prop
+          placeholder="Enter or select a repository"
+          buttonText="Add"
+        />
+      </div>
+      <TokenContainer tokens={prioritizedRepos} onRemove={handleRemoveRepo} />
     </div>
   );
 };

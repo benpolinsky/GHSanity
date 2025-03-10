@@ -8,4 +8,6 @@ Tame GitHub notifications. WIP.
 2. add NEXT_GH_TOKEN in env 
 3. pnpm dev
 
-test main restriction
+
+## Usage
+
