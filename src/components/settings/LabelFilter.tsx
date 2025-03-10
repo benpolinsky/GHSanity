@@ -3,8 +3,8 @@
 import React, { useContext, useState } from 'react';
 import { AppContext, AppDispatchContext } from '@/store/AppContext';
 import { Label } from '@/types';
-import ComboboxComponent from './ComboboxComponent';
-import Token from './Token';
+import ComboboxComponent from '../ComboboxContainer';
+import Token from '../Token';
 import styles from './LabelFilter.module.css';
 
 const LabelFilter = () => {
@@ -37,16 +37,16 @@ const LabelFilter = () => {
   return (
     <div className={styles.labelFilter}>
       <p id="label-filter">Exclude notifications by label</p>
-      <div className={styles.comboboxContainer}>
-        <ComboboxComponent
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-          options={allLabels}
-          onSelect={addLabelFilter}
-          placeholder="Select and press enter"
-          buttonText="Add"
-        />
-      </div>
+
+      <ComboboxComponent
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        options={allLabels}
+        onSelect={addLabelFilter}
+        placeholder="Select and press enter"
+        buttonText="Add"
+      />
+
       <div className={styles.selectedLabels}>
         {labelFilters.map(label => (
           <Token key={label} text={label} onRemove={() => removeLabelFilter(label)} />

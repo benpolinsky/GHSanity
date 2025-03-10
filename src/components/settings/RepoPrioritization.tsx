@@ -2,8 +2,8 @@
 
 import React, { useState, useContext } from 'react';
 import { AppContext, AppDispatchContext } from '@/store/AppContext';
-import ComboboxComponent from './ComboboxComponent';
-import TokenContainer from './TokenContainer';
+import ComboboxComponent from '../ComboboxContainer';
+import TokenContainer from '../TokenContainer';
 import '@reach/combobox/styles.css';
 
 const RepoPrioritization = () => {

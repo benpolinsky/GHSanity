@@ -1,6 +1,6 @@
 import React from 'react';
 import Token from './Token';
-import styles from './LabelFilter.module.css';
+import styles from './Token.module.css';
 
 interface TokenContainerProps {
     tokens: string[];

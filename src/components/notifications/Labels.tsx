@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from './NotificationList.module.css';
-import { Label } from '../types'; // Import consolidated types
+import { Label } from '../../types'; // Import consolidated types
 
 interface LabelsProps {
   labels?: Label[];

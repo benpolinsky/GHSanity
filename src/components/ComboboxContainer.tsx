@@ -3,9 +3,9 @@
 import React from 'react';
 import { Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from '@reach/combobox';
 import '@reach/combobox/styles.css';
-import styles from './LabelFilter.module.css';
+import styles from './ComboBoxContainer.module.css';
 
-interface ComboboxComponentProps {
+interface ComboboxContainerProps {
     inputValue: string;
     setInputValue: (value: string) => void;
     options: string[];
@@ -14,7 +14,7 @@ interface ComboboxComponentProps {
     buttonText: string;
 }
 
-const ComboboxComponent: React.FC<ComboboxComponentProps> = ({ inputValue, setInputValue, options, onSelect, placeholder, buttonText }) => {
+const ComboboxContainer: React.FC<ComboboxContainerProps> = ({ inputValue, setInputValue, options, onSelect, placeholder, buttonText }) => {
     return (
         <div className={styles.comboboxContainer}>
             <Combobox
@@ -40,4 +40,4 @@ const ComboboxComponent: React.FC<ComboboxComponentProps> = ({ inputValue, setIn
     );
 };
 
-export default ComboboxComponent;
+export default ComboboxContainer;

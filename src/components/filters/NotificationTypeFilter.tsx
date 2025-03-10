@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useContext } from 'react';
-import styles from './NotificationFilter.module.css';
+import styles from './NotificationTypeFilter.module.css';
 import { AppContext, AppDispatchContext } from '@/store/AppContext';
 
 export type ValidFilters = 'PullRequest' | 'Issue';
 
-const NotificationFilter = () => {
+const NotificationTypeFilter = () => {
   const { filter } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const dispatchFilter = (filter: ValidFilters | null) => dispatch({ type: 'SET_FILTER', payload: filter });
@@ -20,4 +20,4 @@ const NotificationFilter = () => {
   );
 };
 
-export default NotificationFilter;
+export default NotificationTypeFilter;

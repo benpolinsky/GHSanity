@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './LabelFilter.module.css'; // Use existing styles
+import styles from './Token.module.css'; // Use existing styles
 
 interface TokenProps {
     text: string;
