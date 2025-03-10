@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useReducer } from "react";
 import NotificationList from "./notifications/NotificationList";
 import SettingsPane from "./settings/SettingsPane";
 import useNotifications from "../hooks/useNotifications";
-import styles from "../App.module.css";
+import styles from "./App.module.css";
 import { AppContext, AppDispatchContext } from "@/store/AppContext";
 import { initialState, makeReducer } from "@/store/AppReducer";
 import { LocalStorageStore } from "@/store/AppStorage";
@@ -37,9 +37,7 @@ export const AppContent: React.FC = () => {
       <AppDispatchContext.Provider value={dispatch}>
         <div className={styles.appContainer}>
           <SettingsPane />
-          <div className={styles.filtersContainer}>
-            <Filters />
-          </div>
+          <Filters />
           <NotificationList />
         </div>
       </AppDispatchContext.Provider>
