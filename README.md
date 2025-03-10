@@ -1,6 +1,8 @@
 # GH Sanity
 
-Tame GitHub notifications. WIP.
+Sane GitHub notifications.
+
+![gh sanity logo](gh_sanity_logo.png)
 
 ## Setup
 

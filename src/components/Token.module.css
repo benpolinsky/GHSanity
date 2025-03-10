@@ -35,3 +35,7 @@
   display: flex;
   align-items: center;
 }
+
+.draggable {
+  cursor: grab;
+}

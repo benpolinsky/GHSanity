@@ -23,6 +23,10 @@ const RepoPrioritization = () => {
     dispatch({ type: "SET_PRIORITIZED_REPOS", payload: prioritizedRepos.filter(r => r !== repo) });
   };
 
+  const handleReorderRepos = (newRepos: string[]) => {
+    dispatch({ type: "SET_PRIORITIZED_REPOS", payload: newRepos });
+  };
+
   return (
     <div>
       <p>Prioritize Repositories</p>
@@ -36,7 +40,7 @@ const RepoPrioritization = () => {
           buttonText="Add"
         />
       </div>
-      <TokenContainer tokens={prioritizedRepos} onRemove={handleRemoveRepo} />
+      <TokenContainer tokens={prioritizedRepos} onRemove={handleRemoveRepo} onReorder={handleReorderRepos} />
     </div>
   );
 };
