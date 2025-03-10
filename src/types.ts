@@ -6,9 +6,26 @@ export interface Label {
   url: string;
 }
 
+export type NotificationReason =
+  | 'approval_requested'
+  | 'assign'
+  | 'author'
+  | 'comment'
+  | 'ci_activity'
+  | 'invitation'
+  | 'manual'
+  | 'member_feature_requested'
+  | 'mention'
+  | 'review_requested'
+  | 'security_alert'
+  | 'security_advisory_credit'
+  | 'state_change'
+  | 'subscribed'
+  | 'team_mention';
+
 export interface Notification {
   id: string;
-  reason: string;
+  reason: NotificationReason;
   repository: {
     full_name: string;
     name: string;
@@ -22,6 +39,7 @@ export interface Notification {
     state: string;
     labels?: Label[];
   };
+  url: string
 }
 
 export interface NotificationItemProps {
@@ -68,7 +86,7 @@ export interface RepoPrioritizationProps {
 }
 
 export type ValidFilters = 'Issue' | 'PullRequest' | null;
-
+export type ReasonFilter = "assign" | "participating" | "mention" | "team_mention" | "review_requested"
 export interface GitHubComment {
   id: number;
   created_at: string;

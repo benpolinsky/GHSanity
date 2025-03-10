@@ -1,27 +1,14 @@
 'use client';
 
 import { useCallback } from 'react';
-import { getNotifications } from "@/app/api/github";
+import { getNotificationDetails, getNotifications } from "@/app/api/github";
 import { Notification } from '../types';
 
 const useNotifications = (token: string, dispatch: any) => {
-    const getNotificationDetails = useCallback(async (url: string) => {
-        const response = await fetch(url, {
-            headers: {
-                Authorization: `token ${token}`,
-                Accept: 'application/vnd.github+json',
-                'X-GitHub-Api-Version': '2022-11-28'
-            },
-            cache: 'no-store'
-        });
-        const data = await response.json();
-        return data;
-    }, [token]);
-
     const addDetails = (notifications: Notification[]) => {
         return Promise.all(notifications.map(async (notification: Notification) => {
             const details = await getNotificationDetails(
-                notification.subject.url
+                notification.subject.url, token
             );
             return { ...notification, details };
         })

@@ -49,6 +49,22 @@ export const getNotifications = async (token: string) => {
   return { json: allNotifications, status };
 };
 
+export const getNotificationDetails = async (url: string, token: string) => {
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `token ${token}`,
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    },
+    cache: 'no-store'
+  });
+  const data = await response.json();
+  return data;
+}
+
+
+
+
 export const markNotificationAsRead = async (notificationId: string) => {
   const token = process.env.NEXT_GH_TOKEN || '';
   const response = await fetch(`${GITHUB_API_URL}/notifications/threads/${notificationId}`, {
