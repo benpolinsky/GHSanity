@@ -3,7 +3,7 @@
 import React, { useState, useContext } from 'react';
 import styles from './NotificationList.module.css';
 import NotificationItem from './NotificationItem';
-import { Label, Notification } from '../types'; // Import consolidated types
+import { Label, Notification } from '../../types'; // Import consolidated types
 import { markNotificationAsRead } from '@/app/api/github';
 import { AppContext } from '@/store/AppContext';
 
