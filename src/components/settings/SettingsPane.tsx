@@ -17,6 +17,27 @@ const SettingsPane = () => {
         return () => setMounted(false);
     }, []);
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsVisible(false);
+            }
+        };
+
+        if (isVisible) {
+            document.body.style.overflow = 'hidden';
+            window.addEventListener('keydown', handleKeyDown);
+        } else {
+            document.body.style.overflow = '';
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isVisible]);
+
     const toggleVisibility = () => {
         setIsVisible(!isVisible);
     };
