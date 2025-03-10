@@ -8,10 +8,10 @@ Tame GitHub notifications. WIP.
 2. add NEXT_GH_TOKEN in env 
 3. pnpm dev
 
-
+![GH Sanity Screenshot](gh_sanity.png)
 ## Usage
 
-It's pretty self-explanitory so I'll go into some of the reasons this keeps me sane. (Oh, settings in the upper right - couple things there I'll go into.)
+It's pretty self-explanatory so I'll go into some of the reasons this keeps me sane. (Oh, settings in the upper right - couple things there I'll go into.)
 
 - filter by PR or issue notifications. Seems like something gh would support, but they don't. (I just searched for the 100th time because it seems so basic...)
 - filter by open or closed state - again... basic
