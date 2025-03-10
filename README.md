@@ -1,6 +1,6 @@
 # GH Sanity
 
-Tame GitHub notifications.
+Sane GitHub notifications.
 
 ![gh sanity logo](gh_sanity_logo.png)
 
