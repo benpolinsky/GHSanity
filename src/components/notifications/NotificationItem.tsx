@@ -2,18 +2,18 @@
 
 import React from 'react';
 import styles from './NotificationList.module.css';
-import { IssueIcon, PRIcon, ReleaseIcon, CheckIcon } from './icons';
+import { IssueIcon, PRIcon, ReleaseIcon, CheckIcon } from '../icons';
 import Labels from './Labels';
-import { NotificationItemProps } from '../types'; // Import consolidated types
+import { NotificationItemProps } from '../../types'; // Import consolidated types
 
-const NotificationItem: React.FC<NotificationItemProps> = ({ 
-  notification, 
-  doneNotifications, 
-  markNotificationAsDone, 
+const NotificationItem: React.FC<NotificationItemProps> = ({
+  notification,
+  doneNotifications,
+  markNotificationAsDone,
   markNotificationAsReadInternally,
-  getWebsiteUrl, 
-  toggleNotificationSelection, 
-  isSelected 
+  getWebsiteUrl,
+  toggleNotificationSelection,
+  isSelected
 }) => {
   let Icon;
   if (notification.subject.type === 'PullRequest') {
@@ -41,9 +41,9 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       />
       <span className={styles.notificationMain}>
         <Icon className={`${styles.typeIcon} ${notification.details.state?.toLowerCase() === "open" ? styles.iconOpen : styles.iconClosed}`} />
-        <a 
-          target="_blank" 
-          href={getWebsiteUrl(notification.subject.url)} 
+        <a
+          target="_blank"
+          href={getWebsiteUrl(notification.subject.url)}
           className={styles.notificationLink}
           onClick={handleNotificationClick}
         >
@@ -51,8 +51,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         </a>
         <Labels labels={notification.details.labels} />
       </span>
-      <button 
-        className={styles.itemDoneButton} 
+      <button
+        className={styles.itemDoneButton}
         onClick={() => markNotificationAsDone(notification.id)}
         data-testid={`mark-as-done-${notification.id}`}
       >

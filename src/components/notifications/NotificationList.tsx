@@ -3,12 +3,12 @@
 import React, { useState, useContext } from 'react';
 import styles from './NotificationList.module.css';
 import NotificationItem from './NotificationItem';
-import { Label, Notification } from '../types'; // Import consolidated types
+import { Label, Notification } from '../../types'; // Import consolidated types
 import { markNotificationAsRead } from '@/app/api/github';
 import { AppContext } from '@/store/AppContext';
 
 const NotificationList: React.FC = () => {
-  const { notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter, isLoading } = useContext(AppContext);
+  const { notifications, labelFilters, prioritizedRepos, error, filter, reasonFilter, stateFilter, isLoading } = useContext(AppContext);
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
   const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
 
@@ -95,11 +95,11 @@ const NotificationList: React.FC = () => {
   };
 
   const filteredNotifications = notifications.filter(notification => {
-    const matchesType = filter ? notification.subject.type === filter : true;
-    const matchesAdditionalFilter = additionalFilter ? notification.reason === additionalFilter : true;
-    const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state?.includes('closed') : notification.details.state?.includes('closed'));
-    const labelExcludes = notification.details.labels?.some((label: Label) => labelFilters.includes(label.name));
-    return matchesType && matchesAdditionalFilter && matchesState && !labelExcludes;
+    const matchesType = filter ? notification.subject.type === filter : true; // pr/issue/etc
+    const matchesReasonFilter = reasonFilter ? notification.reason === reasonFilter : true; // mentioned/assigned/participating (though infer that from commented or other)
+    const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state?.includes('closed') : notification.details.state?.includes('closed')); // open closed
+    const labelExcludes = notification.details.labels?.some((label: Label) => labelFilters.includes(label.name)); // labels
+    return matchesType && matchesReasonFilter && matchesState && !labelExcludes;
   });
 
   const groupedNotifications = filteredNotifications.reduce((acc, notification) => {

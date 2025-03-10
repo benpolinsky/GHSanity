@@ -8,7 +8,7 @@ export type State = {
     error: string | null;
     isLoading: boolean;
     filter: string | null;
-    additionalFilter: string | null;
+    reasonFilter: string | null;
     stateFilter: string;
 }
 
@@ -19,7 +19,7 @@ export const initialState: State = {
     error: null,
     isLoading: false,
     filter: null,
-    additionalFilter: null,
+    reasonFilter: null,
     stateFilter: "all",
 };
 
@@ -28,7 +28,7 @@ export type action = {
     payload: any;
 }
 
-type actions = "SET_NOTIFICATIONS" | "SET_LABEL_FILTERS" | "SET_PRIORITIZED_REPOS" | "SET_ERROR" | "SET_IS_LOADING" | "SET_FILTER" | "SET_ADDITIONAL_FILTER" | "SET_STATE_FILTER";
+type actions = "SET_NOTIFICATIONS" | "SET_LABEL_FILTERS" | "SET_PRIORITIZED_REPOS" | "SET_ERROR" | "SET_IS_LOADING" | "SET_FILTER" | "SET_REASON_FILTER" | "SET_STATE_FILTER";
 
 export const makeReducer = (store: Store<Pick<State, "prioritizedRepos" | "labelFilters">>) => (state: State, action: action) => {
     let newState = state;
@@ -54,8 +54,8 @@ export const makeReducer = (store: Store<Pick<State, "prioritizedRepos" | "label
         case "SET_FILTER":
             newState = { ...state, filter: action.payload };
             break;
-        case "SET_ADDITIONAL_FILTER":
-            newState = { ...state, additionalFilter: action.payload };
+        case "SET_REASON_FILTER":
+            newState = { ...state, reasonFilter: action.payload };
             break;
         case "SET_STATE_FILTER":
             newState = { ...state, stateFilter: action.payload };

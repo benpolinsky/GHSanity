@@ -1,0 +1,37 @@
+.token {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.tokenContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+
+.removeButton {
+  background: none;
+  border: none;
+  color: #cf6679;
+  margin-left: 5px;
+  padding: 0 2px 0 0;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  color: #ff8a80;
+}
+
+.label {
+  background-color: #3e3e3e;
+  color: #e0e0e0;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.8em;
+  display: flex;
+  align-items: center;
+}

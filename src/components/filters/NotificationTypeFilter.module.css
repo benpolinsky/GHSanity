@@ -1,7 +1,7 @@
 .filterButtons {
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  flex-direction: column;
   margin-bottom: 20px;
 }
 
@@ -11,8 +11,7 @@
 }
 
 .active {
-  background: #03dac6;
-  color: #121212;
+  color: #03dac6 !important;
   border: none;
 }
 
@@ -34,5 +33,5 @@
 
 .filterLinks .active {
   font-weight: bold;
-  color: #eaeaea;
+  color: #ffffff;
 }

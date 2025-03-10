@@ -1,15 +1,14 @@
 'use client';
 
 import React, { useEffect, useMemo, useReducer } from "react";
-import NotificationList from "./NotificationList";
-import SettingsPane from "./SettingsPane";
-import NotificationFilter from "./NotificationFilter";
-import AdditionalFilters from "./AdditionalFilters";
+import NotificationList from "./notifications/NotificationList";
+import SettingsPane from "./settings/SettingsPane";
 import useNotifications from "../hooks/useNotifications";
-import styles from "../App.module.css";
+import styles from "./App.module.css";
 import { AppContext, AppDispatchContext } from "@/store/AppContext";
 import { initialState, makeReducer } from "@/store/AppReducer";
 import { LocalStorageStore } from "@/store/AppStorage";
+import { Filters } from "./filters/Filters";
 
 export const AppContent: React.FC = () => {
   const token = process.env.NEXT_GH_TOKEN || '';
@@ -19,7 +18,7 @@ export const AppContent: React.FC = () => {
   const { fetchNotifications } = useNotifications(token, dispatch);
 
   useEffect(() => {
-    fetchNotifications().then(() => console.log("fetched"));
+    fetchNotifications()
   }, []);
 
   useEffect(() => {
@@ -37,11 +36,8 @@ export const AppContent: React.FC = () => {
     <AppContext.Provider value={state}>
       <AppDispatchContext.Provider value={dispatch}>
         <div className={styles.appContainer}>
-          <div className={styles.filtersContainer}>
-            <NotificationFilter />
-            <AdditionalFilters />
-            <SettingsPane />
-          </div>
+          <SettingsPane />
+          <Filters />
           <NotificationList />
         </div>
       </AppDispatchContext.Provider>

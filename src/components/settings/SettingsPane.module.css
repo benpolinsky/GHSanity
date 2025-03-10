@@ -10,6 +10,11 @@
     align-items: center;
 }
 
+.settingsIconPosition {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
 .settingsPane {
     background-color: #3e3e3e;
     padding: 20px;
@@ -55,3 +60,9 @@
     float: right;
 }
 
+.settingsPane {
+    min-width: 100vw;
+    min-height: 50vh;
+    background: black;
+    padding: 50px;
+}
