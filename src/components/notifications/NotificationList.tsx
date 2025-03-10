@@ -8,21 +8,9 @@ import { markNotificationAsRead } from '@/app/api/github';
 import { AppContext } from '@/store/AppContext';
 
 const NotificationList: React.FC = () => {
-  const { notifications, labelFilters, prioritizedRepos, error, filter, reasonFilter, stateFilter, isLoading } = useContext(AppContext);
+  const { notifications, labelFilters, prioritizedRepos, error, typeFilter, reasonFilter, stateFilter, isLoading } = useContext(AppContext);
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
   const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
-
-  const getWebsiteUrl = (apiUrl: string) => {
-    // Convert API URL to website URL
-    const websiteUrl = apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
-
-    // For issues and PRs, append a fragment to scroll to the bottom where latest comments are
-    if (apiUrl.includes('/issues/') || apiUrl.includes('/pulls/')) {
-      return `${websiteUrl}#partial-timeline`;
-    }
-
-    return websiteUrl;
-  };
 
   const markNotificationAsDone = async (id: string) => {
     try {
@@ -95,7 +83,7 @@ const NotificationList: React.FC = () => {
   };
 
   const filteredNotifications = notifications.filter(notification => {
-    const matchesType = filter ? notification.subject.type === filter : true; // pr/issue/etc
+    const matchesType = typeFilter ? notification.subject.type === typeFilter : true; // pr/issue/etc
     const matchesReasonFilter = reasonFilter ? notification.reason === reasonFilter : true; // mentioned/assigned/participating (though infer that from commented or other)
     const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state?.includes('closed') : notification.details.state?.includes('closed')); // open closed
     const labelExcludes = notification.details.labels?.some((label: Label) => labelFilters.includes(label.name)); // labels
@@ -160,7 +148,6 @@ const NotificationList: React.FC = () => {
                     doneNotifications={doneNotifications}
                     markNotificationAsDone={markNotificationAsDone}
                     markNotificationAsReadInternally={markNotificationAsReadInternally}
-                    getWebsiteUrl={getWebsiteUrl}
                     toggleNotificationSelection={toggleNotificationSelection}
                     isSelected={selectedNotifications.has(notification.id)}
                   />

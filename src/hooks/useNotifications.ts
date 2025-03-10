@@ -20,7 +20,7 @@ const useNotifications = (token: string, dispatch: any) => {
     }, [dispatch]);
 
     const setError = useCallback((errorStr: string, error?: unknown) => {
-        dispatch({ type: "SET_ERROR", payload: error });
+        dispatch({ type: "SET_ERROR", payload: errorStr });
         if (error)
             console.error(error);
     }, [dispatch]);

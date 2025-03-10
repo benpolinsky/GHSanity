@@ -23,6 +23,8 @@ export type NotificationReason =
   | 'subscribed'
   | 'team_mention';
 
+export type NotificationType = 'Issue' | 'PullRequest' | 'Release';
+
 export interface Notification {
   id: string;
   reason: NotificationReason;
@@ -33,11 +35,14 @@ export interface Notification {
   subject: {
     title: string;
     url: string;
-    type: "PullRequest" | "Issue" | "Release";
+    type: NotificationType;
   };
   details: {
-    state: string;
+    body: string;
+    draft: boolean;
+    html_url: string
     labels?: Label[];
+    state: string;
   };
   url: string
 }
@@ -47,7 +52,6 @@ export interface NotificationItemProps {
   doneNotifications: Set<string>;
   markNotificationAsDone: (id: string) => Promise<void>;
   markNotificationAsReadInternally: (id: string) => void;
-  getWebsiteUrl: (apiUrl: string) => string;
   toggleNotificationSelection: (id: string) => void;
   isSelected: boolean;
 }
@@ -58,7 +62,7 @@ export interface NotificationListProps {
   labelFilters: string[];
   prioritizedRepos: string[];
   error: string | null;
-  filter: ValidFilters | null;
+  filter: NotificationType | null;
   additionalFilter: string | null;
   stateFilter: string;
   isLoading: boolean;
@@ -85,7 +89,6 @@ export interface RepoPrioritizationProps {
   allRepoNames: string[];
 }
 
-export type ValidFilters = 'Issue' | 'PullRequest' | null;
 export type ReasonFilter = "assign" | "participating" | "mention" | "team_mention" | "review_requested"
 export interface GitHubComment {
   id: number;
