@@ -11,7 +11,7 @@ const TokenContainer: React.FC<TokenContainerProps> = ({ tokens, onRemove }) => 
     return (
         <div className={styles.tokenContainer}>
             {tokens.map(token => (
-                <Token key={token} text={token} onRemove={() => onRemove(token)} className={styles.token} />
+                <Token key={token} text={token} onRemove={() => onRemove(token)} />
             ))}
         </div>
     );

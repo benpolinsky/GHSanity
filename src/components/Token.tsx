@@ -4,7 +4,6 @@ import styles from './Token.module.css'; // Use existing styles
 interface TokenProps {
     text: string;
     onRemove: () => void;
-    className: string
 }
 
 const Token: React.FC<TokenProps> = ({ text, onRemove }) => {
