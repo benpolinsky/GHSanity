@@ -11,7 +11,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   doneNotifications,
   markNotificationAsDone,
   markNotificationAsReadInternally,
-  getWebsiteUrl,
   toggleNotificationSelection,
   isSelected
 }) => {
@@ -43,7 +42,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         <Icon className={`${styles.typeIcon} ${notification.details.state?.toLowerCase() === "open" ? styles.iconOpen : styles.iconClosed}`} />
         <a
           target="_blank"
-          href={getWebsiteUrl(notification.subject.url)}
+          href={notification.details.html_url}
           className={styles.notificationLink}
           onClick={handleNotificationClick}
         >

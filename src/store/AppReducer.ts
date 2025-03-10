@@ -7,7 +7,7 @@ export type State = {
     prioritizedRepos: string[];
     error: string | null;
     isLoading: boolean;
-    filter: string | null;
+    typeFilter: string | null;
     reasonFilter: string | null;
     stateFilter: string;
 }
@@ -18,7 +18,7 @@ export const initialState: State = {
     prioritizedRepos: [],
     error: null,
     isLoading: false,
-    filter: null,
+    typeFilter: null,
     reasonFilter: null,
     stateFilter: "all",
 };
@@ -52,7 +52,7 @@ export const makeReducer = (store: Store<Pick<State, "prioritizedRepos" | "label
             newState = { ...state, isLoading: action.payload };
             break;
         case "SET_FILTER":
-            newState = { ...state, filter: action.payload };
+            newState = { ...state, typeFilter: action.payload };
             break;
         case "SET_REASON_FILTER":
             newState = { ...state, reasonFilter: action.payload };
