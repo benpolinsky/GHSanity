@@ -19,18 +19,17 @@ export const AppContent: React.FC = () => {
 
   useEffect(() => {
     fetchNotifications()
-  }, []);
 
-  useEffect(() => {
-    async function loadFromStore() {
+    async function loadSettingsFromStore() {
       const savedState = store.load();
       if (savedState) {
         dispatch({ type: "SET_PRIORITIZED_REPOS", payload: savedState.prioritizedRepos });
         dispatch({ type: "SET_LABEL_FILTERS", payload: savedState.labelFilters });
       }
     }
-    loadFromStore()
-  }, [])
+    loadSettingsFromStore()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) 
 
   return (
     <AppContext.Provider value={state}>

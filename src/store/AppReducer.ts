@@ -1,5 +1,5 @@
 import { Store } from "./AppStorage";
-import type { Notification } from "@/types";
+import type { Notification, ReasonFilter } from "@/types";
 
 export type State = {
     notifications: Notification[];
@@ -8,7 +8,7 @@ export type State = {
     error: string | null;
     isLoading: boolean;
     typeFilter: string | null;
-    reasonFilter: string | null;
+    reasonFilter: ReasonFilter
     stateFilter: string;
 }
 

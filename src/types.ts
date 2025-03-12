@@ -89,7 +89,7 @@ export interface RepoPrioritizationProps {
   allRepoNames: string[];
 }
 
-export type ReasonFilter = "assign" | "participating" | "mention" | "team_mention" | "review_requested"
+export type ReasonFilter = "assign" | "participating" | "mention" | "team_mention" | "review_requested" | null;
 export interface GitHubComment {
   id: number;
   created_at: string;
