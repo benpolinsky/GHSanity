@@ -34,7 +34,7 @@ const ReasonFilters = () => {
     }
 
     return acc;
-  }, {} as Record<ReasonFilter | NotificationReason, number>);
+  }, {} as Record<NotificationReason | "participating", number>);
 
 
   return (
