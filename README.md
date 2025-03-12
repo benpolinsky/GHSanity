@@ -18,6 +18,7 @@ It's pretty self-explanatory so I'll go into some of the reasons this keeps me s
 
 - filter by PR or issue notifications. Seems like something gh would support, but they don't. (I just searched for the 100th time because it seems so basic...)
 - filter by open or closed state - again... basic
+- filter by draft
 - Slim notification items - many more fit on the screen at a glance.
 - Select all notifications in a repo at once. This enables a couple key workflows:
   - select all, deselect one or two, mark as read
