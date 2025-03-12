@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
-import '../index.css';
+import type { Metadata } from "next";
+import "../index.css";
 
 export const metadata: Metadata = {
-  title: 'GitHub Sanity',
-  description: 'Stop the insanity',
+  title: "GitHub Sanity",
+  description: "Stop the insanity",
 };
 
 export default function RootLayout({
@@ -13,9 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
-} 
+}

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect, useMemo, useReducer } from "react";
 import NotificationList from "./notifications/NotificationList";
@@ -11,25 +11,31 @@ import { LocalStorageStore } from "@/store/AppStorage";
 import { Filters } from "./filters/Filters";
 
 export const AppContent: React.FC = () => {
-  const token = process.env.NEXT_GH_TOKEN || '';
-  const store = useMemo(() => new LocalStorageStore(), [])
+  const token = process.env.NEXT_GH_TOKEN || "";
+  const store = useMemo(() => new LocalStorageStore(), []);
   const reducer = makeReducer(store);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { fetchNotifications } = useNotifications(token, dispatch);
 
   useEffect(() => {
-    fetchNotifications()
+    fetchNotifications();
 
     async function loadSettingsFromStore() {
       const savedState = store.load();
       if (savedState) {
-        dispatch({ type: "SET_PRIORITIZED_REPOS", payload: savedState.prioritizedRepos });
-        dispatch({ type: "SET_LABEL_FILTERS", payload: savedState.labelFilters });
+        dispatch({
+          type: "SET_PRIORITIZED_REPOS",
+          payload: savedState.prioritizedRepos,
+        });
+        dispatch({
+          type: "SET_LABEL_FILTERS",
+          payload: savedState.labelFilters,
+        });
       }
     }
-    loadSettingsFromStore()
+    loadSettingsFromStore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) 
+  }, []);
 
   return (
     <AppContext.Provider value={state}>

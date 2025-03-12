@@ -1,20 +1,20 @@
 .notificationListContainer {
-    display: flex;
+  display: flex;
 }
 
 .filtersContainer {
-    flex: 0 0 50px; /* Set the width to 50px */
-    margin-right: 20px;
+  flex: 0 0 50px; /* Set the width to 50px */
+  margin-right: 20px;
 }
 
 .notificationList {
-    flex: 1;
-    font-family: 'Inter', sans-serif;
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%;
+  flex: 1;
+  font-family: "Inter", sans-serif;
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
 }
 
 .loadingContainer {
@@ -133,7 +133,7 @@
 }
 
 .notificationMain {
-  display:flex;
+  display: flex;
   align-items: center;
   flex: 5;
 }
@@ -179,18 +179,6 @@
 
 #stateFilter {
   margin-left: 10px;
-}
-
-.typeIcon {
-  margin-right: 10px;
-  height: 16px;
-}
-.iconOpen {
-  color: #28a745;
-}
-
-.iconClosed {
-  color: #cb2431;
 }
 
 .labels {

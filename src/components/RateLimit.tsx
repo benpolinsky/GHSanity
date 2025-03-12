@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const RateLimit: React.FC = () => {
   const [rateLimit, setRateLimit] = useState({ limit: 0, remaining: 0 });
@@ -8,11 +8,11 @@ const RateLimit: React.FC = () => {
   useEffect(() => {
     const fetchRateLimit = async () => {
       try {
-        const response = await fetch('https://api.github.com/rate_limit');
+        const response = await fetch("https://api.github.com/rate_limit");
         const data = await response.json();
         setRateLimit(data.rate);
       } catch (error) {
-        console.error('Error fetching rate limit:', error);
+        console.error("Error fetching rate limit:", error);
       }
     };
 

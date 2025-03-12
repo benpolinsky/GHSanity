@@ -6,13 +6,11 @@ const nextConfig = {
     NEXT_GH_TOKEN: process.env.NEXT_GH_TOKEN,
   },
   // Handle transpilation for external dependencies
-  transpilePackages: ['@reach/combobox'],
+  transpilePackages: ["@reach/combobox"],
   // Configure webpack to handle SVG files
   experimental: {
-    turbo: {
-      
-    },
-  }
+    turbo: {},
+  },
 };
 
-export default nextConfig; 
+export default nextConfig;
