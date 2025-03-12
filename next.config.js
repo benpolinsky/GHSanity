@@ -8,15 +8,11 @@ const nextConfig = {
   // Handle transpilation for external dependencies
   transpilePackages: ['@reach/combobox'],
   // Configure webpack to handle SVG files
-  webpack(config) {
-    // Add SVG handling
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack']
-    });
-
-    return config;
-  },
+  experimental: {
+    turbo: {
+      
+    },
+  }
 };
 
 export default nextConfig; 
