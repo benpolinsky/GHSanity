@@ -25,7 +25,7 @@ const NotificationTypeIcon = ({
   const Icon = notificationTypeToIconMap[notificationType];
   const classList = [styles.typeIcon, styles[state.toLowerCase()]];
   if (isDraft) classList.push(styles.draft);
-  console.log(classList);
+
   return <Icon className={classList.join(" ")} />;
 };
 
