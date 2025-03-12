@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { AppContent } from '@/components/App';
+import React from "react";
+import { AppContent } from "@/components/App";
 
 export default function Home() {
   return (
@@ -9,4 +9,4 @@ export default function Home() {
       <AppContent />
     </main>
   );
-} 
+}

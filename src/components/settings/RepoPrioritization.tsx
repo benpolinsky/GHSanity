@@ -1,26 +1,36 @@
-'use client';
+"use client";
 
-import React, { useState, useContext } from 'react';
-import { AppContext, AppDispatchContext } from '@/store/AppContext';
-import ComboboxComponent from '../ComboboxContainer';
-import TokenContainer from '../TokenContainer';
-import '@reach/combobox/styles.css';
+import React, { useState, useContext } from "react";
+import { AppContext, AppDispatchContext } from "@/store/AppContext";
+import ComboboxComponent from "../ComboboxContainer";
+import TokenContainer from "../TokenContainer";
+import "@reach/combobox/styles.css";
 
 const RepoPrioritization = () => {
   const { prioritizedRepos, notifications } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
-  const [inputValue, setInputValue] = useState('');
-  const allRepoNames = Array.from(new Set(notifications.map(notification => notification.repository.full_name)));
+  const [inputValue, setInputValue] = useState("");
+  const allRepoNames = Array.from(
+    new Set(
+      notifications.map((notification) => notification.repository.full_name),
+    ),
+  );
 
   const handleAddRepo = (repo: string) => {
     if (repo && !prioritizedRepos.includes(repo)) {
-      dispatch({ type: "SET_PRIORITIZED_REPOS", payload: [...prioritizedRepos, repo] });
-      setInputValue('');
+      dispatch({
+        type: "SET_PRIORITIZED_REPOS",
+        payload: [...prioritizedRepos, repo],
+      });
+      setInputValue("");
     }
   };
 
   const handleRemoveRepo = (repo: string) => {
-    dispatch({ type: "SET_PRIORITIZED_REPOS", payload: prioritizedRepos.filter(r => r !== repo) });
+    dispatch({
+      type: "SET_PRIORITIZED_REPOS",
+      payload: prioritizedRepos.filter((r) => r !== repo),
+    });
   };
 
   const handleReorderRepos = (newRepos: string[]) => {
@@ -40,7 +50,11 @@ const RepoPrioritization = () => {
           buttonText="Add"
         />
       </div>
-      <TokenContainer tokens={prioritizedRepos} onRemove={handleRemoveRepo} onReorder={handleReorderRepos} />
+      <TokenContainer
+        tokens={prioritizedRepos}
+        onRemove={handleRemoveRepo}
+        onReorder={handleReorderRepos}
+      />
     </div>
   );
 };

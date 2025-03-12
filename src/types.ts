@@ -7,23 +7,23 @@ export interface Label {
 }
 
 export type NotificationReason =
-  | 'approval_requested'
-  | 'assign'
-  | 'author'
-  | 'comment'
-  | 'ci_activity'
-  | 'invitation'
-  | 'manual'
-  | 'member_feature_requested'
-  | 'mention'
-  | 'review_requested'
-  | 'security_alert'
-  | 'security_advisory_credit'
-  | 'state_change'
-  | 'subscribed'
-  | 'team_mention';
+  | "approval_requested"
+  | "assign"
+  | "author"
+  | "comment"
+  | "ci_activity"
+  | "invitation"
+  | "manual"
+  | "member_feature_requested"
+  | "mention"
+  | "review_requested"
+  | "security_alert"
+  | "security_advisory_credit"
+  | "state_change"
+  | "subscribed"
+  | "team_mention";
 
-export type NotificationType = 'Issue' | 'PullRequest' | 'Release';
+export type NotificationType = "Issue" | "PullRequest" | "Release";
 
 export interface Notification {
   id: string;
@@ -40,11 +40,11 @@ export interface Notification {
   details: {
     body: string;
     draft: boolean;
-    html_url: string
+    html_url: string;
     labels?: Label[];
     state: string;
   };
-  url: string
+  url: string;
 }
 
 export interface NotificationItemProps {
@@ -89,7 +89,13 @@ export interface RepoPrioritizationProps {
   allRepoNames: string[];
 }
 
-export type ReasonFilter = "assign" | "participating" | "mention" | "team_mention" | "review_requested" | null;
+export type ReasonFilter =
+  | "assign"
+  | "participating"
+  | "mention"
+  | "team_mention"
+  | "review_requested"
+  | null;
 export interface GitHubComment {
   id: number;
   created_at: string;

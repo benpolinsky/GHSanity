@@ -1,0 +1,16 @@
+.typeIcon {
+  margin-right: 10px;
+  height: 16px;
+}
+
+.open {
+  color: #28a745;
+}
+
+.closed {
+  color: #cb2431;
+}
+
+.draft {
+  color: #6c757d;
+}

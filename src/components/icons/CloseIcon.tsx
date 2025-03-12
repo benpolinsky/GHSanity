@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   className?: string;
@@ -6,14 +6,14 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
 
 const CloseIcon: React.FC<IconProps> = ({ className, ...props }) => {
   return (
-    <svg 
-      width="24" 
-      height="24" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
       {...props}
@@ -24,4 +24,4 @@ const CloseIcon: React.FC<IconProps> = ({ className, ...props }) => {
   );
 };
 
-export default CloseIcon; 
+export default CloseIcon;

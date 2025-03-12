@@ -6,17 +6,11 @@ const nextConfig = {
     NEXT_GH_TOKEN: process.env.NEXT_GH_TOKEN,
   },
   // Handle transpilation for external dependencies
-  transpilePackages: ['@reach/combobox'],
+  transpilePackages: ["@reach/combobox"],
   // Configure webpack to handle SVG files
-  webpack(config) {
-    // Add SVG handling
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack']
-    });
-
-    return config;
+  experimental: {
+    turbo: {},
   },
 };
 
-export default nextConfig; 
+export default nextConfig;

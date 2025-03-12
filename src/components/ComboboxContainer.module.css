@@ -1,49 +1,47 @@
-
-
 .comboboxInput {
-    background-color: #3e3e3e;
-    color: #e0e0e0;
-    border: 1px solid #555;
-    padding: 5px;
-    border-radius: 3px;
-  }
-  
-  .comboboxInput::placeholder {
-    color: #aaa;
-  }
-  
-  .comboboxList {
-    background-color: #3e3e3e;
-    color: #e0e0e0;
-    border: 1px solid #555;
-    border-radius: 3px;
-  }
-  
-  .comboboxOption {
-    padding: 5px;
-  }
-  
-  .comboboxOption:hover {
-    background-color: #555;
-  }
-  
-  .comboboxContainer {
-    display: flex;
-    width: 100%;
-  }
-  
-  .comboboxContainer div, .comboboxContainer input {
-    width: 100%;
-  }
-  
-  .addButton {
-    margin-left: 8px;
-    padding: 4px 8px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .addButton:hover {
-    background-color: #0056b3;
-  }
-  
+  background-color: #3e3e3e;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.comboboxInput::placeholder {
+  color: #aaa;
+}
+
+.comboboxList {
+  background-color: #3e3e3e;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 3px;
+}
+
+.comboboxOption {
+  padding: 5px;
+}
+
+.comboboxOption:hover {
+  background-color: #555;
+}
+
+.comboboxContainer {
+  display: flex;
+  width: 100%;
+}
+
+.comboboxContainer div,
+.comboboxContainer input {
+  width: 100%;
+}
+
+.addButton {
+  margin-left: 8px;
+  padding: 4px 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  background-color: #0056b3;
+}

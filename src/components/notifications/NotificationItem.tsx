@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styles from './NotificationList.module.css';
-import { IssueIcon, PRIcon, ReleaseIcon, CheckIcon } from '../icons';
-import Labels from './Labels';
-import { NotificationItemProps } from '../../types'; // Import consolidated types
+import React from "react";
+import styles from "./NotificationList.module.css";
+import { CheckIcon } from "../icons";
+import Labels from "./Labels";
+import { NotificationItemProps } from "../../types"; // Import consolidated types
+import NotificationTypeIcon from "./NotificationTypeIcon";
 
 const NotificationItem: React.FC<NotificationItemProps> = ({
   notification,
@@ -12,17 +13,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   markNotificationAsDone,
   markNotificationAsReadInternally,
   toggleNotificationSelection,
-  isSelected
+  isSelected,
 }) => {
-  let Icon;
-  if (notification.subject.type === 'PullRequest') {
-    Icon = PRIcon;
-  } else if (notification.subject.type === 'Release') {
-    Icon = ReleaseIcon;
-  } else {
-    Icon = IssueIcon;
-  }
-
   // Handle notification link click - mark as read internally
   const handleNotificationClick = () => {
     if (!doneNotifications.has(notification.id)) {
@@ -31,7 +23,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   };
 
   return (
-    <li className={`${styles.notificationItem} ${doneNotifications.has(notification.id) ? styles.done : ''}`} data-testid={`notification-item-${notification.id}`}>
+    <li
+      className={`${styles.notificationItem} 
+        ${doneNotifications.has(notification.id) ? styles.done : ""}`}
+      data-testid={`notification-item-${notification.id}`}
+    >
       <input
         type="checkbox"
         checked={isSelected}
@@ -39,7 +35,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         data-testid={`checkbox-${notification.id}`}
       />
       <span className={styles.notificationMain}>
-        <Icon className={`${styles.typeIcon} ${notification.details.state?.toLowerCase() === "open" ? styles.iconOpen : styles.iconClosed}`} />
+        <NotificationTypeIcon
+          notificationType={notification.subject.type}
+          state={notification.details.state}
+          isDraft={notification.details.draft}
+        />
         <a
           target="_blank"
           href={notification.details.html_url}
