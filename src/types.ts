@@ -23,7 +23,12 @@ export type NotificationReason =
   | "subscribed"
   | "team_mention";
 
-export type NotificationType = "Issue" | "PullRequest" | "Release";
+export type NotificationType =
+  | "Issue"
+  | "PullRequest"
+  | "Release"
+  | "Discussion"
+  | "RepositoryDependabotAlertsThread";
 
 export interface Notification {
   id: string;

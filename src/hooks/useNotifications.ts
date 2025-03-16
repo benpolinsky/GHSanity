@@ -25,7 +25,7 @@ const useNotifications = (token: string, dispatch: any) => {
       return Promise.all(
         notifications.map(async (notification: Notification) => {
           const details = await getNotificationDetails(
-            notification.subject.url,
+            notification.subject.url ?? notification.url,
             token,
           );
           return { ...notification, details };
