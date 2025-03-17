@@ -60,6 +60,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             <CommandResultItem
               notification={notification}
               renderer={renderer}
+              key={notification.id}
             />
           ))}
         </ul>
