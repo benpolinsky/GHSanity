@@ -43,7 +43,8 @@ export interface Notification {
     type: NotificationType;
   };
   details: {
-    body: string;
+    title: string;
+    body?: string;
     draft: boolean;
     html_url: string;
     labels?: Label[];
