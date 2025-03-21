@@ -16,7 +16,7 @@
     "@testing-library/user-event": "^14.6.1",
     "fuse.js": "^7.1.0",
     "marked": "^15.0.7",
-    "next": "^15.2.2",
+    "next": "^15.2.3",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
