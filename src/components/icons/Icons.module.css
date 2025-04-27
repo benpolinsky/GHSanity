@@ -1,0 +1,14 @@
+.collapseButton {
+  color: #03dac6;
+  border-radius: 4px;
+  font-size: 0.8em;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  background: none;
+  cursor: pointer;
+}
+
+.collapseButton:hover {
+  color: #018786;
+}

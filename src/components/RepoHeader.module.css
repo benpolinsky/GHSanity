@@ -1,0 +1,41 @@
+.repoNameText {
+  display: inline-flex;
+  font-weight: bold;
+}
+
+.repoCount {
+  font-size: 0.9em;
+  color: #03dac6;
+  /* margin-left: 8px; */
+  font-weight: normal;
+}
+
+.repoHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between chevron, repo name, and count */
+}
+
+.repoName {
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  color: #e0e0e0;
+  margin-bottom: 0px; /* Add margin for spacing */
+  padding-bottom: 0px; /* Add padding for spacing */
+}
+
+.selectButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #03dac6;
+  font-size: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selectButton:hover {
+  color: #018786;
+}

@@ -1,25 +1,44 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
+// Removed react-icons import
 
-import styles from './NotificationList.module.css';
-import NotificationItem from './NotificationItem';
-import { Notification, NotificationListProps } from '../types'; // Import consolidated types
-import { markNotificationAsRead } from '@/app/api/github';
+import styles from "./NotificationList.module.css";
+import NotificationItem from "./NotificationItem";
+import { Notification, NotificationListProps } from "../types"; // Import consolidated types
+import { markNotificationAsRead } from "@/app/api/github";
+import { RepoHeader } from "./RepoHeader";
 
-const NotificationList: React.FC<NotificationListProps> = ({ token, notifications, labelFilters, prioritizedRepos, error, filter, additionalFilter, stateFilter, isLoading }) => {
-  const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
-  const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
+const NotificationList: React.FC<NotificationListProps> = ({
+  token,
+  notifications,
+  labelFilters,
+  prioritizedRepos,
+  error,
+  filter,
+  additionalFilter,
+  stateFilter,
+  isLoading,
+}) => {
+  const [doneNotifications, setDoneNotifications] = useState<Set<string>>(
+    new Set()
+  );
+  const [selectedNotifications, setSelectedNotifications] = useState<
+    Set<string>
+  >(new Set());
+  const [collapsedRepos, setCollapsedRepos] = useState<Set<string>>(new Set());
 
   const getWebsiteUrl = (apiUrl: string) => {
     // Convert API URL to website URL
-    const websiteUrl = apiUrl.replace('api.github.com/repos', 'github.com').replace('/pulls/', '/pull/');
-    
+    const websiteUrl = apiUrl
+      .replace("api.github.com/repos", "github.com")
+      .replace("/pulls/", "/pull/");
+
     // For issues and PRs, append a fragment to scroll to the bottom where latest comments are
-    if (apiUrl.includes('/issues/') || apiUrl.includes('/pulls/')) {
+    if (apiUrl.includes("/issues/") || apiUrl.includes("/pulls/")) {
       return `${websiteUrl}#partial-timeline`;
     }
-    
+
     return websiteUrl;
   };
 
@@ -27,18 +46,22 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     try {
       const response = await markNotificationAsRead(token, id);
       if (response.status === 205) {
-        setDoneNotifications(prevDoneNotifications => new Set(prevDoneNotifications).add(id));
+        setDoneNotifications((prevDoneNotifications) =>
+          new Set(prevDoneNotifications).add(id)
+        );
       } else {
-        console.error('Failed to mark notification as done', response);
+        console.error("Failed to mark notification as done", response);
       }
     } catch (err) {
-      console.error('Failed to mark notification as done', err);
+      console.error("Failed to mark notification as done", err);
     }
   };
 
   // Mark notification as read internally without API call
   const markNotificationAsReadInternally = (id: string) => {
-    setDoneNotifications(prevDoneNotifications => new Set(prevDoneNotifications).add(id));
+    setDoneNotifications((prevDoneNotifications) =>
+      new Set(prevDoneNotifications).add(id)
+    );
   };
 
   const toggleNotificationSelection = (id: string) => {
@@ -53,17 +76,21 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
 
   const markSelectedAsDone = async () => {
     const newDoneNotifications = new Set(doneNotifications);
-    const markAsDonePromises = Array.from(selectedNotifications).map(id => markNotificationAsDone(id));
-    
+    const markAsDonePromises = Array.from(selectedNotifications).map((id) =>
+      markNotificationAsDone(id)
+    );
+
     await Promise.all(markAsDonePromises);
-    
-    selectedNotifications.forEach(id => newDoneNotifications.add(id));
+
+    selectedNotifications.forEach((id) => newDoneNotifications.add(id));
     setDoneNotifications(newDoneNotifications);
     setSelectedNotifications(new Set());
   };
 
   const selectAllNotifications = () => {
-    const allNotificationIds = new Set(filteredNotifications.map(notification => notification.id));
+    const allNotificationIds = new Set(
+      filteredNotifications.map((notification) => notification.id)
+    );
     setSelectedNotifications(allNotificationIds);
   };
 
@@ -72,14 +99,18 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
   };
 
   const toggleRepoSelection = (repoName: string) => {
-    const repoNotifications = groupedNotifications[repoName].map(notification => notification.id);
+    const repoNotifications = groupedNotifications[repoName].map(
+      (notification) => notification.id
+    );
     const newSelectedNotifications = new Set(selectedNotifications);
-    const allSelected = repoNotifications.every(id => newSelectedNotifications.has(id));
+    const allSelected = repoNotifications.every((id) =>
+      newSelectedNotifications.has(id)
+    );
 
     if (allSelected) {
-      repoNotifications.forEach(id => newSelectedNotifications.delete(id));
+      repoNotifications.forEach((id) => newSelectedNotifications.delete(id));
     } else {
-      repoNotifications.forEach(id => newSelectedNotifications.add(id));
+      repoNotifications.forEach((id) => newSelectedNotifications.add(id));
     }
 
     setSelectedNotifications(newSelectedNotifications);
@@ -93,28 +124,64 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
     }
   };
 
-  const filteredNotifications = notifications.filter(notification => {
+  const toggleRepoCollapse = (repoName: string) => {
+    const newCollapsedRepos = new Set(collapsedRepos);
+    if (newCollapsedRepos.has(repoName)) {
+      newCollapsedRepos.delete(repoName);
+    } else {
+      newCollapsedRepos.add(repoName);
+    }
+    setCollapsedRepos(newCollapsedRepos);
+  };
+
+  const collapseAllRepos = () => {
+    const allRepoNames = new Set(sortedRepoNames);
+    setCollapsedRepos(allRepoNames);
+  };
+
+  const uncollapseAllRepos = () => {
+    setCollapsedRepos(new Set());
+  };
+
+  const filteredNotifications = notifications.filter((notification) => {
     const matchesType = filter ? notification.subject.type === filter : true;
-    const matchesAdditionalFilter = additionalFilter ? notification.reason === additionalFilter : true;
-    const matchesState = stateFilter === 'all' ? true : (stateFilter === 'open' ? !notification.details.state?.includes('closed') : notification.details.state?.includes('closed'));
-    const labelExcludes = notification.details.labels?.some(label => labelFilters.includes(label.name));
-    return matchesType && matchesAdditionalFilter && matchesState && !labelExcludes;
+    const matchesAdditionalFilter = additionalFilter
+      ? notification.reason === additionalFilter
+      : true;
+    const matchesState =
+      stateFilter === "all"
+        ? true
+        : stateFilter === "open"
+        ? !notification.details.state?.includes("closed")
+        : notification.details.state?.includes("closed");
+    const labelExcludes = notification.details.labels?.some((label) =>
+      labelFilters.includes(label.name)
+    );
+    return (
+      matchesType && matchesAdditionalFilter && matchesState && !labelExcludes
+    );
   });
 
-  const groupedNotifications = filteredNotifications.reduce((acc, notification) => {
-    const repoName = notification.repository.full_name;
-    if (!acc[repoName]) {
-      acc[repoName] = [];
-    }
-    acc[repoName].push(notification);
-    return acc;
-  }, {} as Record<string, Notification[]>);
+  const groupedNotifications = filteredNotifications.reduce(
+    (acc, notification) => {
+      const repoName = notification.repository.full_name;
+      if (!acc[repoName]) {
+        acc[repoName] = [];
+      }
+      acc[repoName].push(notification);
+      return acc;
+    },
+    {} as Record<string, Notification[]>
+  );
 
   const sortedRepoNames = Object.keys(groupedNotifications).sort((a, b) => {
     const aPriority = prioritizedRepos.includes(a) ? 0 : 1;
     const bPriority = prioritizedRepos.includes(b) ? 0 : 1;
     return aPriority - bPriority;
   });
+
+  const allReposCollapsed = collapsedRepos.size === sortedRepoNames.length;
+  const allReposExpanded = collapsedRepos.size === 0;
 
   // Calculate total number of notifications
   const totalNotificationsCount = filteredNotifications.length;
@@ -133,10 +200,21 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
           <div className={styles.globalActions}>
             <div className={styles.buttonGroup}>
               <button onClick={toggleGlobalSelection}>
-                {selectedNotifications.size === filteredNotifications.length ? 'Deselect All' : 'Select All'}
+                {selectedNotifications.size === filteredNotifications.length
+                  ? "Deselect All"
+                  : "Select All"}
               </button>
-              <button onClick={markSelectedAsDone} disabled={selectedNotifications.size === 0}>
+              <button
+                onClick={markSelectedAsDone}
+                disabled={selectedNotifications.size === 0}
+              >
                 Mark Selected as Read
+              </button>
+              <button onClick={collapseAllRepos} disabled={allReposCollapsed}>
+                Collapse All
+              </button>
+              <button onClick={uncollapseAllRepos} disabled={allReposExpanded}>
+                Expand All
               </button>
             </div>
             <div className={styles.notificationCount}>
@@ -145,26 +223,32 @@ const NotificationList: React.FC<NotificationListProps> = ({ token, notification
           </div>
           {sortedRepoNames.map((repoName) => (
             <div key={repoName} className={styles.repo}>
-              <h2 className={styles.repoName}>
-                <span className={styles.repoNameText}>{repoName}</span> <span className={styles.repoCount}>({groupedNotifications[repoName].length})</span>
-              </h2>
-              <button className={styles.selectButton} onClick={() => toggleRepoSelection(repoName)}>
-                {groupedNotifications[repoName].every(notification => selectedNotifications.has(notification.id)) ? 'Deselect All' : 'Select All'}
-              </button>
-              <ul className={styles.notificationItems}>
-                {groupedNotifications[repoName].map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    notification={notification}
-                    doneNotifications={doneNotifications}
-                    markNotificationAsDone={markNotificationAsDone}
-                    markNotificationAsReadInternally={markNotificationAsReadInternally}
-                    getWebsiteUrl={getWebsiteUrl}
-                    toggleNotificationSelection={toggleNotificationSelection}
-                    isSelected={selectedNotifications.has(notification.id)}
-                  />
-                ))}
-              </ul>
+              <RepoHeader
+                repoName={repoName}
+                groupedNotifications={groupedNotifications}
+                collapsedRepos={collapsedRepos}
+                toggleRepoCollapse={toggleRepoCollapse}
+                toggleRepoSelection={toggleRepoSelection}
+                selectedNotifications={selectedNotifications}
+              />
+              {!collapsedRepos.has(repoName) && (
+                <ul className={styles.notificationItems}>
+                  {groupedNotifications[repoName].map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      notification={notification}
+                      doneNotifications={doneNotifications}
+                      markNotificationAsDone={markNotificationAsDone}
+                      markNotificationAsReadInternally={
+                        markNotificationAsReadInternally
+                      }
+                      getWebsiteUrl={getWebsiteUrl}
+                      toggleNotificationSelection={toggleNotificationSelection}
+                      isSelected={selectedNotifications.has(notification.id)}
+                    />
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </>
