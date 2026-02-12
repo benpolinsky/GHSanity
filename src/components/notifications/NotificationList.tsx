@@ -75,8 +75,8 @@ const NotificationList: React.FC<{
   ) => {
     return reasonFilter
       ? (reasonFilter === "participating" &&
-        isParticipating(notificationReason)) ||
-      notificationReason === reasonFilter
+          isParticipating(notificationReason)) ||
+          notificationReason === reasonFilter
       : true;
   };
 
