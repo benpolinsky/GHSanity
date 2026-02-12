@@ -1,23 +1,12 @@
 .appContainer {
   display: flex;
-}
-
-.leftPane {
-  width: 250px;
-  padding: 20px;
-  background-color: #1e1e1e;
-  border-right: 1px solid #3e3e3e;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: var(--toolbar-height);
 }
 
 .mainContent {
   flex: 1;
-  padding: 20px;
-}
-
-.filtersContainer {
-  flex: 0 0 80px; /* Set the width to 50px */
-}
-
-.notificationList {
-  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-xl) var(--space-2xl);
 }

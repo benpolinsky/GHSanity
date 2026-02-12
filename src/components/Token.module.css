@@ -9,32 +9,47 @@
 .tokenContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
 
 .removeButton {
   background: none;
   border: none;
-  color: #cf6679;
-  margin-left: 5px;
-  padding: 0 2px 0 0;
+  color: var(--color-state-closed);
+  margin-left: var(--space-xs);
+  padding: 0;
   cursor: pointer;
+  font-size: var(--text-xs);
+  line-height: 1;
+  transition: color var(--transition-fast);
 }
 
 .removeButton:hover {
-  color: #ff8a80;
+  color: var(--color-accent);
 }
 
 .label {
-  background-color: #3e3e3e;
-  color: #e0e0e0;
-  padding: 2px 5px;
-  border-radius: 3px;
-  font-size: 0.8em;
-  display: flex;
+  background: var(--color-bg-surface-2);
+  color: var(--color-fg-secondary);
+  padding: var(--space-2xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  display: inline-flex;
   align-items: center;
+  transition: border-color var(--transition-fast);
+}
+
+.label:hover {
+  border-color: var(--color-border-default);
 }
 
 .draggable {
   cursor: grab;
+}
+
+.draggable:active {
+  cursor: grabbing;
 }

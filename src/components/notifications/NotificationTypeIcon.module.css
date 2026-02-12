@@ -1,16 +1,21 @@
 .typeIcon {
-  margin-right: 10px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
 }
 
-.open {
-  color: #28a745;
+.stateOpen {
+  color: var(--color-state-open);
 }
 
 .closed {
-  color: #cb2431;
+  color: var(--color-state-closed);
+}
+
+.merged {
+  color: var(--color-state-merged);
 }
 
 .draft {
-  color: #6c757d;
+  color: var(--color-state-draft);
 }

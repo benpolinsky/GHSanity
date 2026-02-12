@@ -8,12 +8,15 @@ import {
   Notification,
   NotificationReason,
   ReasonFilter,
-} from "../../types"; // Import consolidated types
+} from "../../types";
 import { markNotificationAsRead } from "@/app/api/github";
 import { AppContext } from "@/store/AppContext";
 import { isParticipating } from "@/shared/filterHelpers";
 
-const NotificationList: React.FC = () => {
+const NotificationList: React.FC<{
+  selectedNotifications: Set<string>;
+  setSelectedNotifications: React.Dispatch<React.SetStateAction<Set<string>>>;
+}> = ({ selectedNotifications, setSelectedNotifications }) => {
   const {
     notifications,
     labelFilters,
@@ -29,17 +32,12 @@ const NotificationList: React.FC = () => {
   const [doneNotifications, setDoneNotifications] = useState<Set<string>>(
     new Set(),
   );
-  const [selectedNotifications, setSelectedNotifications] = useState<
-    Set<string>
-  >(new Set());
 
   const markNotificationAsDone = async (id: string) => {
     try {
       const response = await markNotificationAsRead(id);
       if (response.status === 205) {
-        setDoneNotifications((prevDoneNotifications) =>
-          new Set(prevDoneNotifications).add(id),
-        );
+        setDoneNotifications((prev) => new Set(prev).add(id));
       } else {
         console.error("Failed to mark notification as done", response);
       }
@@ -48,75 +46,27 @@ const NotificationList: React.FC = () => {
     }
   };
 
-  // Mark notification as read internally without API call
   const markNotificationAsReadInternally = (id: string) => {
-    setDoneNotifications((prevDoneNotifications) =>
-      new Set(prevDoneNotifications).add(id),
-    );
+    setDoneNotifications((prev) => new Set(prev).add(id));
   };
 
   const toggleNotificationSelection = (id: string) => {
-    const newSelectedNotifications = new Set(selectedNotifications);
-    if (newSelectedNotifications.has(id)) {
-      newSelectedNotifications.delete(id);
-    } else {
-      newSelectedNotifications.add(id);
-    }
-    setSelectedNotifications(newSelectedNotifications);
-  };
-
-  const markSelectedAsDone = async () => {
-    const newDoneNotifications = new Set(doneNotifications);
-    const markAsDonePromises = Array.from(selectedNotifications).map((id) =>
-      markNotificationAsDone(id),
-    );
-
-    await Promise.all(markAsDonePromises);
-
-    selectedNotifications.forEach((id) => newDoneNotifications.add(id));
-    setDoneNotifications(newDoneNotifications);
-    setSelectedNotifications(new Set());
-  };
-
-  const selectAllNotifications = () => {
-    const allNotificationIds = new Set(
-      filteredNotifications.map((notification) => notification.id),
-    );
-    setSelectedNotifications(allNotificationIds);
-  };
-
-  const deselectAllNotifications = () => {
-    setSelectedNotifications(new Set());
+    setSelectedNotifications((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   };
 
   const toggleRepoSelection = (repoName: string) => {
-    const repoNotifications = groupedNotifications[repoName].map(
-      (notification: Notification) => notification.id,
-    );
-    const newSelectedNotifications = new Set(selectedNotifications);
-    const allSelected = repoNotifications.every((id: string) =>
-      newSelectedNotifications.has(id),
-    );
-
-    if (allSelected) {
-      repoNotifications.forEach((id: string) =>
-        newSelectedNotifications.delete(id),
-      );
-    } else {
-      repoNotifications.forEach((id: string) =>
-        newSelectedNotifications.add(id),
-      );
-    }
-
-    setSelectedNotifications(newSelectedNotifications);
-  };
-
-  const toggleGlobalSelection = () => {
-    if (selectedNotifications.size === filteredNotifications.length) {
-      deselectAllNotifications();
-    } else {
-      selectAllNotifications();
-    }
+    const repoIds = groupedNotifications[repoName].map((n) => n.id);
+    setSelectedNotifications((prev) => {
+      const next = new Set(prev);
+      const allSelected = repoIds.every((id) => next.has(id));
+      repoIds.forEach((id) => (allSelected ? next.delete(id) : next.add(id)));
+      return next;
+    });
   };
 
   const matchesReasonFilter = (
@@ -139,11 +89,10 @@ const NotificationList: React.FC = () => {
         ? true
         : stateFilter === "open"
           ? !notification.details.state?.includes("closed")
-          : notification.details.state?.includes("closed"); // open closed
+          : notification.details.state?.includes("closed");
     const labelExcludes = notification.details.labels?.some((label: Label) =>
       labelFilters.includes(label.name),
     );
-
     const matchesDraft = draftFilter ? notification.details.draft : true;
     return (
       matchesType &&
@@ -157,9 +106,7 @@ const NotificationList: React.FC = () => {
   const groupedNotifications = filteredNotifications.reduce(
     (acc, notification) => {
       const repoName = notification.repository.full_name;
-      if (!acc[repoName]) {
-        acc[repoName] = [];
-      }
+      if (!acc[repoName]) acc[repoName] = [];
       acc[repoName].push(notification);
       return acc;
     },
@@ -175,73 +122,108 @@ const NotificationList: React.FC = () => {
     );
   });
 
-  // Calculate total number of notifications
-  const totalNotificationsCount = filteredNotifications.length;
+  const allFilteredIds = filteredNotifications.map((n) => n.id);
+  const allSelected =
+    allFilteredIds.length > 0 &&
+    allFilteredIds.every((id) => selectedNotifications.has(id));
+  const someSelected =
+    !allSelected && allFilteredIds.some((id) => selectedNotifications.has(id));
+
+  const toggleSelectAll = () => {
+    setSelectedNotifications((prev) => {
+      if (allSelected) return new Set();
+      return new Set([...prev, ...allFilteredIds]);
+    });
+  };
+
+  const globalCheckboxRef = React.useRef<HTMLInputElement>(null);
+  React.useEffect(() => {
+    if (globalCheckboxRef.current) {
+      globalCheckboxRef.current.indeterminate = someSelected;
+    }
+  }, [someSelected]);
+
+  let rowIndex = 0;
 
   return (
     <div className={styles.notificationList}>
       {error && <div className={styles.error}>{JSON.stringify(error)}</div>}
       {isLoading && (
         <div className={styles.loadingContainer}>
-          <div className={styles.loadingSpinner}></div>
-          <p>Loading all notifications...</p>
+          <div className={styles.loadingSpinner} />
+          <p>Loading notifications…</p>
         </div>
       )}
-      {!error && !isLoading && (
+      {!error && !isLoading && filteredNotifications.length > 0 && (
         <>
-          <div className={styles.globalActions}>
-            <div className={styles.buttonGroup}>
-              <button onClick={toggleGlobalSelection}>
-                {selectedNotifications.size === filteredNotifications.length
-                  ? "Deselect All"
-                  : "Select All"}
-              </button>
-              <button
-                onClick={markSelectedAsDone}
-                disabled={selectedNotifications.size === 0}
-              >
-                Mark Selected as Read
-              </button>
-            </div>
-            <div className={styles.notificationCount}>
-              Total Notifications: <strong>{totalNotificationsCount}</strong>
-            </div>
+          <div className={styles.selectAllRow}>
+            <input
+              ref={globalCheckboxRef}
+              type="checkbox"
+              className={styles.checkbox}
+              checked={allSelected}
+              onChange={toggleSelectAll}
+              aria-label="Select all notifications"
+            />
+            <span className={styles.selectAllLabel}>
+              {allSelected
+                ? "Deselect all"
+                : `Select all ${allFilteredIds.length}`}
+            </span>
           </div>
-          {sortedRepoNames.map((repoName) => (
-            <div key={repoName} className={styles.repo}>
-              <RepInfo
-                notificationCount={groupedNotifications[repoName].length}
-                toggleAllFn={() => toggleRepoSelection(repoName)}
-                toggleLabel={
-                  groupedNotifications[repoName].every(
-                    (notification: Notification) =>
-                      selectedNotifications.has(notification.id),
-                  )
-                    ? "Deselect All"
-                    : "Select All"
-                }
-                repoName={repoName}
-              />
-
-              <ul className={styles.notificationItems}>
-                {groupedNotifications[repoName].map(
-                  (notification: Notification) => (
-                    <NotificationItem
-                      key={notification.id}
-                      notification={notification}
-                      doneNotifications={doneNotifications}
-                      markNotificationAsDone={markNotificationAsDone}
-                      markNotificationAsReadInternally={
-                        markNotificationAsReadInternally
-                      }
-                      toggleNotificationSelection={toggleNotificationSelection}
-                      isSelected={selectedNotifications.has(notification.id)}
-                    />
-                  ),
-                )}
-              </ul>
-            </div>
-          ))}
+          {sortedRepoNames.map((repoName) => {
+            const repoNotifications = groupedNotifications[repoName];
+            const repoIds = repoNotifications.map((n) => n.id);
+            const repoAllSelected = repoIds.every((id) =>
+              selectedNotifications.has(id),
+            );
+            const repoSomeSelected =
+              !repoAllSelected &&
+              repoIds.some((id) => selectedNotifications.has(id));
+            return (
+              <div key={repoName} className={styles.repoGroup}>
+                <div className={styles.repoHeader}>
+                  <RepoCheckbox
+                    checked={repoAllSelected}
+                    indeterminate={repoSomeSelected}
+                    onChange={() => toggleRepoSelection(repoName)}
+                  />
+                  <a
+                    href={`https://github.com/${repoName}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.repoName}
+                  >
+                    {repoName}
+                  </a>
+                  <span className={styles.repoCount}>
+                    {repoNotifications.length}
+                  </span>
+                </div>
+                <ul className={styles.notificationItems}>
+                  {repoNotifications.map((notification) => {
+                    const idx = rowIndex++;
+                    return (
+                      <NotificationItem
+                        key={notification.id}
+                        notification={notification}
+                        doneNotifications={doneNotifications}
+                        markNotificationAsDone={markNotificationAsDone}
+                        markNotificationAsReadInternally={
+                          markNotificationAsReadInternally
+                        }
+                        toggleNotificationSelection={
+                          toggleNotificationSelection
+                        }
+                        isSelected={selectedNotifications.has(notification.id)}
+                        animationIndex={idx}
+                      />
+                    );
+                  })}
+                </ul>
+              </div>
+            );
+          })}
         </>
       )}
     </div>
@@ -250,34 +232,23 @@ const NotificationList: React.FC = () => {
 
 export default NotificationList;
 
-interface RepoInfoProps {
-  repoName: string;
-  notificationCount: number;
-  toggleAllFn: () => void;
-  toggleLabel: string;
-}
-
-const RepInfo = ({
-  repoName,
-  notificationCount,
-  toggleAllFn,
-  toggleLabel,
-}: RepoInfoProps) => {
+const RepoCheckbox: React.FC<{
+  checked: boolean;
+  indeterminate: boolean;
+  onChange: () => void;
+}> = ({ checked, indeterminate, onChange }) => {
+  const ref = React.useRef<HTMLInputElement>(null);
+  React.useEffect(() => {
+    if (ref.current) ref.current.indeterminate = indeterminate;
+  }, [indeterminate]);
   return (
-    <>
-      <h2 className={styles.repoName}>
-        <a
-          href={`https://github.com/${repoName}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span className={styles.repoNameText}>{repoName}</span>{" "}
-          <span className={styles.repoCount}>({notificationCount})</span>
-        </a>
-      </h2>
-      <button className={styles.selectButton} onClick={() => toggleAllFn()}>
-        {toggleLabel}
-      </button>
-    </>
+    <input
+      ref={ref}
+      type="checkbox"
+      className={styles.repoCheckbox}
+      checked={checked}
+      onChange={onChange}
+      aria-label="Select all in repo"
+    />
   );
 };

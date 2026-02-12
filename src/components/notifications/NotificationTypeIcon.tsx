@@ -5,7 +5,7 @@ import {
   ReleaseIcon,
   CommunityIcon,
   ShieldIcon,
-} from "../icons"; // Import ShieldIcon
+} from "../icons";
 import { NotificationType } from "../../types";
 import styles from "./NotificationTypeIcon.module.css";
 import { IconProps } from "../icons/ReleaseIcon";
@@ -27,17 +27,22 @@ const NotificationTypeIcon = ({
     Release: ReleaseIcon,
     Issue: IssueIcon,
     Discussion: CommunityIcon,
-    RepositoryDependabotAlertsThread: ShieldIcon, // Use ShieldIcon here
+    RepositoryDependabotAlertsThread: ShieldIcon,
   };
 
   const Icon = notificationTypeToIconMap[notificationType];
-  if (Icon) {
-    const classList = [styles.typeIcon];
-    if (state) classList.push(styles[state]);
-    if (isDraft) classList.push(styles.draft);
-    return <Icon className={classList.join(" ")} />;
+  if (!Icon) return null;
+
+  let colorClass = styles.stateOpen;
+  if (isDraft) {
+    colorClass = styles.draft;
+  } else if (state === "merged") {
+    colorClass = styles.merged;
+  } else if (state?.includes("closed")) {
+    colorClass = styles.closed;
   }
-  return null;
+
+  return <Icon className={`${styles.typeIcon} ${colorClass}`} />;
 };
 
 export default NotificationTypeIcon;

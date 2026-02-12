@@ -1,44 +1,219 @@
+/* ============================================================
+   GH Sanity — Design Tokens
+   Modern dashboard aesthetic, dark-mode-first
+   ============================================================ */
+
+/* --- @font-face: DM Sans (self-hosted) --- */
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/dm-sans-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/dm-sans-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/dm-sans-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/dm-sans-700.woff2") format("woff2");
+}
+
+/* --- @font-face: JetBrains Mono (self-hosted) --- */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-700.woff2") format("woff2");
+}
+
+/* --- Token System --- */
 :root {
-  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Backgrounds */
+  --color-bg-base: #0a0a0b;
+  --color-bg-surface-1: #111113;
+  --color-bg-surface-2: #1a1a1d;
+  --color-bg-surface-3: #242428;
+
+  /* Foregrounds / text */
+  --color-fg-primary: #e8e8ec;
+  --color-fg-secondary: #a0a0a8;
+  --color-fg-muted: #68686f;
+  --color-fg-inverse: #0a0a0b;
+
+  /* Accent — coral default (overridable via [data-accent]) */
+  --color-accent: #ff4f40;
+  --color-accent-hover: #ff6b5e;
+  --color-accent-muted: rgba(255, 79, 64, 0.12);
+  --color-accent-strong: #ff3626;
+
+  /* Borders */
+  --color-border-subtle: #2a2a2f;
+  --color-border-default: #3a3a40;
+  --color-border-strong: #4a4a52;
+
+  /* Semantic state colors (GitHub-aligned) */
+  --color-state-success: #3fb950;
+  --color-state-danger: #f85149;
+  --color-state-warning: #d29922;
+  --color-state-info: #58a6ff;
+  --color-state-merged: #a371f7;
+  --color-state-open: #3fb950;
+  --color-state-closed: #f85149;
+  --color-state-draft: #6e7681;
+  --color-state-open-muted: rgba(63, 185, 80, 0.12);
+  --color-state-closed-muted: rgba(248, 81, 73, 0.12);
+  --color-state-merged-muted: rgba(163, 113, 247, 0.12);
+  --color-state-draft-muted: rgba(110, 118, 129, 0.15);
+  --color-overlay: rgba(0, 0, 0, 0.55);
+
+  /* Spacing scale */
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 6px;
+  --space-md: 8px;
+  --space-lg: 12px;
+  --space-xl: 16px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 48px;
+  --space-5xl: 64px;
+
+  /* Border radii */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+
+  /* Typography — families */
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", monospace;
+
+  /* Typography — sizes (14px root) */
+  --text-2xs: 0.625rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.857rem;
+  --text-base: 1rem;
+  --text-md: 1.143rem;
+  --text-lg: 1.286rem;
+  --text-xl: 1.571rem;
+
+  /* Typography — weights */
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Easings */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Z-index layers */
+  --z-toolbar: 100;
+  --z-sticky: 90;
+  --z-overlay: 200;
+  --z-modal: 300;
+
+  /* Layout */
+  --toolbar-height: 52px;
+
+  /* Root font */
+  font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.5;
-  font-weight: 400;
-
+  font-weight: var(--weight-normal);
   color-scheme: dark;
-  color: #e0e0e0;
-  background-color: #121212;
-
+  color: var(--color-fg-primary);
+  background-color: var(--color-bg-base);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* --- Accent: Coral (default) --- */
+[data-accent="coral"],
+:root {
+  --color-accent: #ff4f40;
+  --color-accent-hover: #ff6b5e;
+  --color-accent-muted: rgba(255, 79, 64, 0.12);
+  --color-accent-strong: #ff3626;
+}
+
+/* --- Accent: Chartreuse --- */
+[data-accent="chartreuse"] {
+  --color-accent: #a6ff00;
+  --color-accent-hover: #bdff40;
+  --color-accent-muted: rgba(166, 255, 0, 0.12);
+  --color-accent-strong: #8cd600;
+}
+
+/* --- Global resets --- */
 * {
   box-sizing: border-box;
 }
 
 a {
-  font-weight: 500;
-  color: #eedada;
+  font-weight: var(--weight-medium);
+  color: var(--color-fg-primary);
   text-decoration: none;
 }
+
 a:hover {
-  color: #ffffff;
+  color: var(--color-accent);
 }
 
 a:visited {
-  color: #eedada;
+  color: var(--color-fg-primary);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #121212;
-  color: #e0e0e0;
+  background-color: var(--color-bg-base);
+  color: var(--color-fg-primary);
   line-height: 1.5;
   overflow-x: hidden;
+  /* Noise texture for depth */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
 }
 
 h1,
@@ -47,49 +222,24 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   margin: 0.5em 0;
 }
 
-h1 {
-  font-size: 2.5em;
-  line-height: 1.2;
+/* --- Scrollbar styling --- */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-h2 {
-  font-size: 2em;
-  line-height: 1.3;
+::-webkit-scrollbar-track {
+  background: var(--color-bg-base);
 }
 
-h3 {
-  font-size: 1.75em;
-  line-height: 1.4;
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-default);
+  border-radius: var(--radius-full);
 }
 
-h4 {
-  font-size: 1.5em;
-  line-height: 1.5;
-}
-
-h5 {
-  font-size: 1.25em;
-  line-height: 1.6;
-}
-
-h6 {
-  font-size: 1em;
-  line-height: 1.7;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #121212;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #6200ea;
-  }
-  button {
-    color: #ffffff;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
 }

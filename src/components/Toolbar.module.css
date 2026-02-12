@@ -1,0 +1,92 @@
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--toolbar-height);
+  background-color: var(--color-bg-surface-2);
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-xl);
+  z-index: var(--z-toolbar);
+  gap: var(--space-lg);
+}
+
+.left {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.appName {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.totalCount {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-fg-secondary);
+}
+
+.countLabel {
+  color: var(--color-fg-muted);
+}
+
+.selectedCount {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+  font-weight: var(--weight-medium);
+}
+
+.settingsButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.settingsButton:hover {
+  border-color: var(--color-border-default);
+  background-color: var(--color-bg-surface-3);
+}
+
+.gearIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-fg-secondary);
+  transition: color var(--transition-fast);
+}
+
+.settingsButton:hover .gearIcon {
+  color: var(--color-fg-primary);
+}

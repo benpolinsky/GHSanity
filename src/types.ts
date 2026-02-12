@@ -60,6 +60,7 @@ export interface NotificationItemProps {
   markNotificationAsReadInternally: (id: string) => void;
   toggleNotificationSelection: (id: string) => void;
   isSelected: boolean;
+  animationIndex?: number;
 }
 
 export interface NotificationListProps {

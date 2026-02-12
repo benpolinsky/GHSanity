@@ -8,8 +8,10 @@ import styles from "./App.module.css";
 import { AppContext, AppDispatchContext } from "@/store/AppContext";
 import { initialState, makeReducer } from "@/store/AppReducer";
 import { LocalStorageStore } from "@/store/AppStorage";
-import { Filters } from "./filters/Filters";
+import FilterBar from "./filters/FilterBar";
 import CommandPalette from "./CommandPalette";
+import Toolbar from "./Toolbar";
+import BulkActionBar from "./BulkActionBar";
 
 export const App: React.FC = () => {
   const token = process.env.NEXT_GH_TOKEN || "";
@@ -18,6 +20,10 @@ export const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { fetchNotifications } = useNotifications(token, dispatch);
   const [isPaletteVisible, setPaletteVisible] = useState<boolean>(false);
+  const [isSettingsVisible, setSettingsVisible] = useState(false);
+  const [selectedNotifications, setSelectedNotifications] = useState<
+    Set<string>
+  >(new Set());
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.metaKey && event.key === "k") {
@@ -60,9 +66,26 @@ export const App: React.FC = () => {
     <AppContext.Provider value={state}>
       <AppDispatchContext.Provider value={dispatch}>
         <div className={styles.appContainer}>
-          <SettingsPane />
-          <Filters />
-          <NotificationList />
+          <Toolbar
+            filterBar={<FilterBar />}
+            totalCount={state.notifications.length}
+            selectedCount={selectedNotifications.size}
+            onSettingsClick={() => setSettingsVisible(true)}
+          />
+          <main className={styles.mainContent}>
+            <NotificationList
+              selectedNotifications={selectedNotifications}
+              setSelectedNotifications={setSelectedNotifications}
+            />
+          </main>
+          <BulkActionBar
+            selectedNotifications={selectedNotifications}
+            setSelectedNotifications={setSelectedNotifications}
+          />
+          <SettingsPane
+            isVisible={isSettingsVisible}
+            onClose={() => setSettingsVisible(false)}
+          />
           <CommandPalette
             isVisible={isPaletteVisible}
             onClose={handleClosePalette}
