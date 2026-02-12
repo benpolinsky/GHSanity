@@ -28,12 +28,12 @@
 ## 5. UX and Feedback
 
 - [ ] 5.1 Expose adapter selection toggle/config and display current adapter in status UI
-- [ ] 5.2 Show hydration/partial status in search UI; allow retry after cap
-- [ ] 5.3 Add snippets/highlights in search results
+- [x] 5.2 Show hydration/partial status in search UI; allow retry after cap
+- [x] 5.3 Add snippets/highlights in search results
 
 ## 6. Testing
 
 - [ ] 6.1 Unit tests for adapter contract (browser + mocked sqlite client)
-- [ ] 6.2 Integration tests for hydration pipeline (mock GitHub responses, ETag path, cap path)
-- [ ] 6.3 Search ranking/filter tests (title vs body, unread boost)
+- [x] 6.2 Integration tests for hydration pipeline (mock GitHub responses, ETag path, cap path)
+- [x] 6.3 Search ranking/filter tests (title vs body, unread boost)
 - [ ] 6.4 Fallback tests (SQLite down → browser)

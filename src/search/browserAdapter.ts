@@ -127,15 +127,36 @@ export class BrowserSearchIndex implements SearchIndex {
 
     async indexThreads(docs: ThreadDoc[]): Promise<void> {
         this.hydrating = true;
-        docs.forEach((doc) => {
-            this.docs.set(doc.id, doc);
-            if (this.miniSearch.getDocument(doc.id)) {
-                this.miniSearch.remove({ id: doc.id } as StoredDoc);
+        const addOrReplace = (doc: StoredDoc) => {
+            const existing = this.docs.get(doc.id);
+            if (existing) {
+                try {
+                    this.miniSearch.remove(existing);
+                } catch (err) {
+                    console.warn("miniSearch remove failed for", doc.id, err);
+                }
             }
-            this.miniSearch.add(doc as StoredDoc);
-        });
+            this.docs.set(doc.id, doc);
+            try {
+                this.miniSearch.add(doc);
+            } catch (err) {
+                console.warn("miniSearch add failed, rebuilding index", doc.id, err);
+                this.rebuildIndex();
+                this.miniSearch.add(doc);
+            }
+        };
+
+        docs.forEach((doc) => addOrReplace(doc as StoredDoc));
         await idbPutMany(this.db, docs as StoredDoc[]);
         this.hydrating = false;
+    }
+
+    private rebuildIndex() {
+        this.miniSearch.removeAll();
+        const all = Array.from(this.docs.values());
+        if (all.length) {
+            this.miniSearch.addAll(all);
+        }
     }
 
     async search(query: string, filters?: SearchFilters): Promise<SearchResult[]> {
@@ -151,8 +172,7 @@ export class BrowserSearchIndex implements SearchIndex {
             if (filters?.repo && doc.repo !== filters.repo) return false;
             if (filters?.type && doc.type !== filters.type) return false;
             if (filters?.state && doc.state !== filters.state) return false;
-            if (typeof filters?.draft === "boolean" && doc.draft !== filters.draft)
-                return false;
+            if (filters?.draft === true && !doc.draft) return false;
             if (filters?.reason && doc.reason !== filters.reason) return false;
             if (filters?.labels?.length) {
                 const labels = doc.labels || [];

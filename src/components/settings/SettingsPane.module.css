@@ -111,6 +111,31 @@
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-sm);
+  color: var(--color-fg-secondary);
+}
+
+.statusLabel {
+  font-weight: var(--weight-medium);
+  color: var(--color-fg-primary);
+}
+
+.statusValue {
+  font-family: var(--font-mono);
+  color: var(--color-fg-muted);
+}
+
+.statusActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
 .actionButton {
   display: inline-flex;
   align-items: center;

@@ -14,6 +14,7 @@ import type { Notification } from "@/types";
 import NotificationTypeIcon from "@/components/notifications/NotificationTypeIcon";
 import { SearchIndexContext } from "@/store/SearchIndexContext";
 import type { SearchResult } from "@/search/types";
+import { hydrateDiscussions } from "@/search/hydrationPipeline";
 
 interface CommandPaletteProps {
   isVisible: boolean;
@@ -56,8 +57,21 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<ResultItem[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [status, setStatus] = useState(() => ({
+    isReady: false,
+    isHydrating: false,
+    partialHydration: false,
+    docCount: 0,
+  }));
+  const [debugInfo, setDebugInfo] = useState({
+    lastQuery: "",
+    hitCount: 0,
+  });
+  const [respectFilters, setRespectFilters] = useState(true);
+  const [rehydrating, setRehydrating] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const token = process.env.NEXT_GH_TOKEN || "";
 
   const allRepoNames = useMemo(
     () => Array.from(new Set(notifications.map((n) => n.repository.full_name))),
@@ -82,6 +96,11 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
     }
     setTimeout(() => inputRef.current?.focus(), 50);
   }, [isVisible]);
+
+  useEffect(() => {
+    if (!searchIndex) return;
+    setStatus(searchIndex.status());
+  }, [searchIndex, isVisible]);
 
   useEffect(() => {
     if (!query) {
@@ -175,11 +194,14 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
     const runSearch = async () => {
       if (!searchIndex) return;
       const filters: any = {};
-      if (stateFilter && stateFilter !== "all") filters.state = stateFilter;
-      if (typeFilter) filters.type = typeFilter;
-      if (typeof draftFilter === "boolean") filters.draft = draftFilter;
-      const hits = await searchIndex.search(query, filters);
+      if (respectFilters) {
+        if (stateFilter && stateFilter !== "all") filters.state = stateFilter;
+        if (typeFilter) filters.type = typeFilter;
+        if (draftFilter) filters.draft = true;
+      }
+      const hits = await searchIndex.search(query, respectFilters ? filters : undefined);
       if (cancelled) return;
+      setDebugInfo({ lastQuery: query, hitCount: hits.length });
       setResults(hits.map((hit) => ({ kind: "search" as const, hit })));
       setActiveIndex(hits.length > 0 ? 0 : -1);
     };
@@ -197,7 +219,23 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
     stateFilter,
     typeFilter,
     draftFilter,
+    respectFilters,
   ]);
+
+  const highlightSnippet = (snippet: string, term: string) => {
+    if (!term) return snippet;
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${escaped})`, "ig");
+    return snippet.split(regex).map((part, idx) =>
+      regex.test(part) ? (
+        <mark key={`${part}-${idx}`} className={styles.highlight}>
+          {part}
+        </mark>
+      ) : (
+        <span key={`${part}-${idx}`}>{part}</span>
+      ),
+    );
+  };
 
   const selectResult = (item: ResultItem) => {
     if (item.kind === "command") {
@@ -321,7 +359,9 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                     <span className={styles.resultTitle}>{item.hit.title}</span>
                     <span className={styles.resultRepo}>{item.hit.repo}</span>
                     {item.hit.snippet && (
-                      <span className={styles.resultSnippet}>{item.hit.snippet}</span>
+                      <span className={styles.resultSnippet}>
+                        {highlightSnippet(item.hit.snippet, query)}
+                      </span>
                     )}
                   </a>
                 )}
@@ -347,6 +387,54 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             <code>repo:org/name</code>
           </div>
         )}
+        <div className={styles.statusBar}>
+          <div className={styles.statusMeta}>
+            <span>
+              {status.docCount ?? 0} docs · {status.isReady ? "ready" : "loading"}
+              {status.isHydrating ? " · hydrating" : ""}
+              {status.partialHydration ? " · partial" : ""}
+            </span>
+            <span className={styles.statusDebug}>
+              filters {respectFilters ? "on" : "off"}
+            </span>
+            {debugInfo.lastQuery && (
+              <span className={styles.statusDebug}>
+                last "{debugInfo.lastQuery}" → {debugInfo.hitCount} hits
+              </span>
+            )}
+          </div>
+          <div className={styles.statusActions}>
+            <button
+              className={styles.statusButton}
+              onClick={() => setRespectFilters((v) => !v)}
+            >
+              {respectFilters ? "Respect filters" : "Ignore filters"}
+            </button>
+            <button
+              className={styles.statusButton}
+              onClick={() => searchIndex && setStatus(searchIndex.status())}
+              disabled={!searchIndex}
+            >
+              Refresh
+            </button>
+            <button
+              className={styles.statusButton}
+              onClick={async () => {
+                if (!searchIndex || !token || !notifications.length) return;
+                setRehydrating(true);
+                try {
+                  await hydrateDiscussions(notifications, token, searchIndex);
+                  setStatus(searchIndex.status());
+                } finally {
+                  setRehydrating(false);
+                }
+              }}
+              disabled={!searchIndex || !token || !notifications.length || rehydrating}
+            >
+              {rehydrating ? "Rehydrating…" : "Retry hydration"}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
