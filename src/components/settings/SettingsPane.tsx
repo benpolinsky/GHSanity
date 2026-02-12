@@ -5,11 +5,15 @@ import { createPortal } from "react-dom";
 import LabelFilter from "./LabelFilter";
 import RepoPrioritization from "./RepoPrioritization";
 import styles from "./SettingsPane.module.css";
-import { GearIcon, CloseIcon } from "../icons";
+import { CloseIcon } from "../icons";
 import RateLimit from "../RateLimit";
 
-const SettingsPane = () => {
-  const [isVisible, setIsVisible] = useState(false);
+interface SettingsPaneProps {
+  isVisible: boolean;
+  onClose: () => void;
+}
+
+const SettingsPane: React.FC<SettingsPaneProps> = ({ isVisible, onClose }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -20,7 +24,7 @@ const SettingsPane = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsVisible(false);
+        onClose();
       }
     };
 
@@ -36,37 +40,48 @@ const SettingsPane = () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isVisible]);
+  }, [isVisible, onClose]);
 
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
+  if (!isVisible || !mounted) return null;
 
-  return (
-    <div className={styles.settingsIconPosition}>
-      <GearIcon
-        className={styles.gearIcon}
-        onClick={toggleVisibility}
-        data-testid="gear-icon"
-      />
-      {isVisible &&
-        mounted &&
-        createPortal(
-          <div className={styles.overlay}>
-            <div className={styles.settingsPane} data-testid="settings-pane">
-              <CloseIcon
-                className={styles.closeIcon}
-                onClick={toggleVisibility}
-                data-testid="close-icon"
-              />
-              <LabelFilter />
-              <RepoPrioritization />
-              <RateLimit />
-            </div>
-          </div>,
-          document.body,
-        )}
-    </div>
+  return createPortal(
+    <div className={styles.overlay} onClick={onClose}>
+      <div
+        className={styles.panel}
+        data-testid="settings-pane"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className={styles.panelHeader}>
+          <span className={styles.panelTitle}>Settings</span>
+          <button
+            className={styles.closeButton}
+            onClick={onClose}
+            data-testid="close-icon"
+            aria-label="Close settings"
+          >
+            <CloseIcon className={styles.closeIcon} />
+          </button>
+        </div>
+
+        <div className={styles.panelBody}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>Label Exclusions</h3>
+            <LabelFilter />
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>Repo Prioritization</h3>
+            <RepoPrioritization />
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>API Rate Limit</h3>
+            <RateLimit />
+          </section>
+        </div>
+      </div>
+    </div>,
+    document.body,
   );
 };
 

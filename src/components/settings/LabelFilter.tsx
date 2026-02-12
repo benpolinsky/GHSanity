@@ -39,14 +39,12 @@ const LabelFilter = () => {
 
   return (
     <div className={styles.labelFilter}>
-      <p id="label-filter">Exclude notifications by label</p>
-
       <ComboboxComponent
         inputValue={inputValue}
         setInputValue={setInputValue}
         options={allLabels}
         onSelect={addLabelFilter}
-        placeholder="Select and press enter"
+        placeholder="Select label to exclude"
         buttonText="Add"
       />
 

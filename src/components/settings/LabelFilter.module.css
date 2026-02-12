@@ -1,13 +1,12 @@
 .labelFilter {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: var(--space-lg);
   width: 100%;
 }
 
 .selectedLabels {
   display: flex;
-  gap: 5px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
 }

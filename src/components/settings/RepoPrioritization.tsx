@@ -4,7 +4,6 @@ import React, { useState, useContext } from "react";
 import { AppContext, AppDispatchContext } from "@/store/AppContext";
 import ComboboxComponent from "../ComboboxContainer";
 import TokenContainer from "../TokenContainer";
-import "@reach/combobox/styles.css";
 
 const RepoPrioritization = () => {
   const { prioritizedRepos, notifications } = useContext(AppContext);
@@ -39,17 +38,14 @@ const RepoPrioritization = () => {
 
   return (
     <div>
-      <p>Prioritize Repositories</p>
-      <div>
-        <ComboboxComponent
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-          options={allRepoNames}
-          onSelect={handleAddRepo} // Fix the onSelect prop
-          placeholder="Enter or select a repository"
-          buttonText="Add"
-        />
-      </div>
+      <ComboboxComponent
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        options={allRepoNames}
+        onSelect={handleAddRepo}
+        placeholder="Enter or select a repository"
+        buttonText="Add"
+      />
       <TokenContainer
         tokens={prioritizedRepos}
         onRemove={handleRemoveRepo}

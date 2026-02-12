@@ -1,0 +1,98 @@
+.controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+/* --- State segmented control --- */
+.stateSegments {
+    display: flex;
+    align-items: center;
+    background: var(--color-bg-surface-1);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 2px;
+    gap: 2px;
+}
+
+.stateSegment {
+    padding: var(--space-xs) var(--space-md);
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-fg-muted);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+.stateSegment:hover {
+    color: var(--color-fg-secondary);
+    background: var(--color-bg-surface-2);
+}
+
+.stateSegment.active {
+    background: var(--color-bg-surface-3);
+    color: var(--color-fg-primary);
+}
+
+/* --- Draft toggle switch --- */
+.draftToggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+}
+
+.draftLabel {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    color: var(--color-fg-muted);
+    user-select: none;
+}
+
+.toggle {
+    position: relative;
+    width: 28px;
+    height: 16px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-bg-surface-2);
+    cursor: pointer;
+    padding: 0;
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+.toggle:hover {
+    border-color: var(--color-border-strong);
+}
+
+.toggleOn {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.toggleThumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-fg-secondary);
+    transition:
+        transform var(--transition-fast),
+        background-color var(--transition-fast);
+}
+
+.toggleOn .toggleThumb {
+    transform: translateX(12px);
+    background: var(--color-bg-base);
+}

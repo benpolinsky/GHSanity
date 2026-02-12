@@ -1,42 +1,33 @@
-.notificationListContainer {
-  display: flex;
-}
-
-.filtersContainer {
-  flex: 0 0 50px; /* Set the width to 50px */
-  margin-right: 20px;
-}
+/* ============================================================
+   NotificationList — compact density, token-based
+   ============================================================ */
 
 .notificationList {
-  flex: 1;
-  font-family: "Inter", sans-serif;
-  background-color: #1e1e1e;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
 }
 
+/* --- Loading --- */
 .loadingContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 0;
+  padding: var(--space-4xl) 0;
 }
 
 .loadingContainer p {
-  margin-top: 16px;
-  color: #e0e0e0;
+  margin-top: var(--space-xl);
+  color: var(--color-fg-secondary);
+  font-size: var(--text-sm);
 }
 
 .loadingSpinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(3, 218, 198, 0.2);
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--color-accent-muted);
   border-radius: 50%;
-  border-top-color: #03dac6;
-  animation: spin 1s ease-in-out infinite;
+  border-top-color: var(--color-accent);
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -45,194 +36,221 @@
   }
 }
 
+/* --- Error --- */
 .error {
-  color: #cf6679;
-  background-color: #2e2e2e;
-  padding: 10px;
-  border: 1px solid #cf6679;
-  border-radius: 4px;
-  margin-bottom: 20px;
+  color: var(--color-state-danger);
+  background-color: var(--color-bg-surface-2);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-state-danger);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-lg);
 }
-.repo {
-  margin-bottom: 40px;
+
+/* --- Repo group --- */
+.repoGroup {
+  margin-bottom: var(--space-xs);
+}
+
+/* --- Select-all row --- */
+.selectAllRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  height: 30px;
+  padding: 0 var(--space-lg);
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-surface-1);
+}
+
+.selectAllLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  user-select: none;
+  cursor: default;
+}
+
+.repoHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-bg-surface-2);
+  border-bottom: 1px solid var(--color-border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+
+.repoCheckbox {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--color-accent);
 }
 
 .repoName {
-  display: flex;
-  /* justify-content: space-between; */
-  align-items: center;
-  font-size: 1em;
-  color: #e0e0e0;
-  margin-bottom: 0px; /* Add margin for spacing */
-  padding-bottom: 0px; /* Add padding for spacing */
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--color-fg-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
-.repoNameText {
-  display: inline-flex;
+.repoName:hover {
+  color: var(--color-accent);
 }
 
 .repoCount {
-  font-size: 0.9em;
-  color: #999;
-  margin-left: 8px;
-  font-weight: normal;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-fg-muted);
+  min-width: 16px;
+  text-align: center;
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface-3);
+  line-height: 1.5;
 }
 
-.notificationCount {
-  margin-left: 20px;
-  color: #e0e0e0;
-  display: flex;
-  align-items: center;
-}
 
-.notificationCount strong {
-  color: #03dac6;
-  margin-left: 5px;
-}
 
-.doneButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #03dac6;
-  font-size: 0.8em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.itemDoneButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #03dac6;
-  font-size: 0.8em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px 0 0;
-}
-
-.doneButton:hover {
-  color: #018786;
-}
-
+/* --- Notification items list --- */
 .notificationItems {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.notificationItem {
-  display: flex;
-  /* justify-content: space-between; */
-  flex: auto;
-  align-items: center;
-  padding: 2px 0 0 0;
-  border-bottom: 1px solid #3e3e3e;
-}
-
-.notificationMain {
+/* --- Row --- */
+.row {
   display: flex;
   align-items: center;
-  flex: 5;
+  gap: var(--space-md);
+  height: 34px;
+  padding: 0 var(--space-lg);
+  border-bottom: 1px solid var(--color-border-subtle);
+  animation: rowEnter 200ms var(--ease-out) both;
+  transition: opacity var(--transition-normal);
 }
 
-.notificationItem:last-child {
-  border-bottom: none;
+.row:hover {
+  background: var(--color-bg-surface-1);
 }
 
-.notificationLink {
-  text-decoration: none;
-  transition: color 0.3s;
+@keyframes rowEnter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.notificationDetails {
-  color: #999;
-  font-size: 0.9em;
+/* --- Checkbox --- */
+.checkbox {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--color-accent);
 }
 
-.done {
-  opacity: 0.6;
-  text-decoration: line-through;
-}
-
-.statusBox {
-  display: flex;
-  flex-direction: row;
+/* --- Title link --- */
+.title {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-fg-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
-.filterButtons {
-  display: flex;
-  margin-bottom: 20px;
+.title:hover {
+  color: var(--color-accent);
 }
 
-.filterButtons button {
-  background: none;
-  border: 1px solid #3e3e3e;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 4px;
-  color: #e0e0e0;
+/* --- State badge --- */
+.stateBadge {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px var(--space-sm);
+  border-radius: var(--radius-sm);
+  line-height: 1.5;
 }
 
-#stateFilter {
-  margin-left: 10px;
+.stateOpen {
+  color: var(--color-state-open);
+  background: var(--color-state-open-muted);
 }
 
-.labels {
-  display: flex;
-  gap: 5px;
-  margin-top: 5px;
+.stateClosed {
+  color: var(--color-state-closed);
+  background: var(--color-state-closed-muted);
 }
 
-.label {
-  /* background-color: #3e3e3e; */
-  color: #e0e0e0;
-  padding: 2px 5px;
-  border-radius: 3px;
-  font-size: 0.8em;
+.stateMerged {
+  color: var(--color-state-merged);
+  background: var(--color-state-merged-muted);
 }
 
-.globalActions {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 20px;
+.stateDraft {
+  color: var(--color-state-draft);
+  background: var(--color-state-draft-muted);
 }
 
-.buttonGroup {
-  display: flex;
-  gap: 10px;
-}
-
-.globalActions button {
-  background: none;
-  border: 1px solid #3e3e3e;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 4px;
-  color: #e0e0e0;
-}
-
-.globalActions button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.selectButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #03dac6;
-  font-size: 0.8em;
+/* --- Quick-action (mark-as-read) --- */
+.quickAction {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px; /* Add margin for spacing */
-  padding-bottom: 5px; /* Add padding for spacing */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2xs);
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  flex-shrink: 0;
 }
 
-.selectButton:hover {
-  color: #018786;
+.row:hover .quickAction {
+  opacity: 0.5;
+}
+
+.quickAction:hover {
+  opacity: 1 !important;
+  background: var(--color-accent-muted);
+}
+
+.checkIcon {
+  width: 14px;
+  height: 14px;
+  color: var(--color-accent);
+}
+
+/* --- Done state --- */
+.done {
+  opacity: 0.4;
+}
+
+.done .title {
+  text-decoration: line-through;
+  color: var(--color-fg-muted);
 }

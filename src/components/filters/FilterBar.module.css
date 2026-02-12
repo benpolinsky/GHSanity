@@ -1,0 +1,12 @@
+.filterBar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.divider {
+    width: 1px;
+    height: var(--space-xl);
+    background: var(--color-border-subtle);
+    flex-shrink: 0;
+}

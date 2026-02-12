@@ -1,0 +1,58 @@
+.pills {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: nowrap;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-md);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--color-fg-muted);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+.pill:hover {
+    color: var(--color-fg-secondary);
+    border-color: var(--color-border-default);
+}
+
+.pill.active {
+    background: var(--color-accent-muted);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.count {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    min-width: 14px;
+    text-align: center;
+    padding: 0 3px;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-surface-3);
+    color: var(--color-fg-muted);
+    line-height: 1.5;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+.pill.active .count {
+    background: var(--color-accent);
+    color: var(--color-bg-base);
+}
