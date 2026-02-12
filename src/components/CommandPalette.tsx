@@ -8,11 +8,12 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import Fuse from "fuse.js";
 import styles from "./CommandPalette.module.css";
 import { AppContext, AppDispatchContext } from "@/store/AppContext";
 import type { Notification } from "@/types";
 import NotificationTypeIcon from "@/components/notifications/NotificationTypeIcon";
+import { SearchIndexContext } from "@/store/SearchIndexContext";
+import type { SearchResult } from "@/search/types";
 
 interface CommandPaletteProps {
   isVisible: boolean;
@@ -41,14 +42,17 @@ const REASON_COMMANDS: Record<string, string> = {
 type ResultItem =
   | { kind: "notification"; notification: Notification }
   | { kind: "repo"; repoName: string }
-  | { kind: "command"; label: string; action: () => void };
+  | { kind: "command"; label: string; action: () => void }
+  | { kind: "search"; hit: SearchResult };
 
 const CommandPalette: React.FC<CommandPaletteProps> = ({
   isVisible,
   onClose,
 }) => {
-  const { notifications } = useContext(AppContext);
+  const { notifications, stateFilter, typeFilter, draftFilter } =
+    useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
+  const searchIndex = useContext(SearchIndexContext);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<ResultItem[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -167,21 +171,33 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
       return;
     }
 
-    // Default: Fuse.js search
-    const fuse = new Fuse(notifications, {
-      keys: ["subject.title", "subject.type", "repository.full_name"],
-      includeScore: true,
-      threshold: 0.4,
-    });
-    const fuseResults = fuse.search(query, { limit: 15 });
-    setResults(
-      fuseResults.map((r) => ({
-        kind: "notification" as const,
-        notification: r.item,
-      })),
-    );
-    setActiveIndex(fuseResults.length > 0 ? 0 : -1);
-  }, [query, notifications, allRepoNames, dispatch, executeAndClose]);
+    let cancelled = false;
+    const runSearch = async () => {
+      if (!searchIndex) return;
+      const filters: any = {};
+      if (stateFilter && stateFilter !== "all") filters.state = stateFilter;
+      if (typeFilter) filters.type = typeFilter;
+      if (typeof draftFilter === "boolean") filters.draft = draftFilter;
+      const hits = await searchIndex.search(query, filters);
+      if (cancelled) return;
+      setResults(hits.map((hit) => ({ kind: "search" as const, hit })));
+      setActiveIndex(hits.length > 0 ? 0 : -1);
+    };
+    runSearch();
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    query,
+    notifications,
+    allRepoNames,
+    dispatch,
+    executeAndClose,
+    searchIndex,
+    stateFilter,
+    typeFilter,
+    draftFilter,
+  ]);
 
   const selectResult = (item: ResultItem) => {
     if (item.kind === "command") {
@@ -193,6 +209,10 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
+      setQuery("");
+      onClose();
+    } else if (item.kind === "search") {
+      window.open(item.hit.url, "_blank");
       setQuery("");
       onClose();
     } else {
@@ -283,6 +303,26 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                     <span className={styles.resultRepo}>
                       {item.notification.repository.full_name}
                     </span>
+                  </a>
+                )}
+                {item.kind === "search" && (
+                  <a
+                    href={item.hit.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.resultLink}
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <NotificationTypeIcon
+                      notificationType={item.hit.type}
+                      state={item.hit.state || "open"}
+                      isDraft={false}
+                    />
+                    <span className={styles.resultTitle}>{item.hit.title}</span>
+                    <span className={styles.resultRepo}>{item.hit.repo}</span>
+                    {item.hit.snippet && (
+                      <span className={styles.resultSnippet}>{item.hit.snippet}</span>
+                    )}
                   </a>
                 )}
                 {item.kind === "repo" && (

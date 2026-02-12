@@ -7,6 +7,9 @@ import RepoPrioritization from "./RepoPrioritization";
 import styles from "./SettingsPane.module.css";
 import { CloseIcon } from "../icons";
 import RateLimit from "../RateLimit";
+import { SearchIndexContext } from "@/store/SearchIndexContext";
+import { useContext } from "react";
+import { clearHydrationCache } from "@/search/hydrationPipeline";
 
 interface SettingsPaneProps {
   isVisible: boolean;
@@ -15,6 +18,8 @@ interface SettingsPaneProps {
 
 const SettingsPane: React.FC<SettingsPaneProps> = ({ isVisible, onClose }) => {
   const [mounted, setMounted] = useState(false);
+  const [clearing, setClearing] = useState(false);
+  const searchIndex = useContext(SearchIndexContext);
 
   useEffect(() => {
     setMounted(true);
@@ -77,6 +82,25 @@ const SettingsPane: React.FC<SettingsPaneProps> = ({ isVisible, onClose }) => {
           <section className={styles.section}>
             <h3 className={styles.sectionTitle}>API Rate Limit</h3>
             <RateLimit />
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>Search Cache</h3>
+            <button
+              className={styles.actionButton}
+              onClick={async () => {
+                if (!searchIndex) return;
+                setClearing(true);
+                try {
+                  await clearHydrationCache(searchIndex);
+                } finally {
+                  setClearing(false);
+                }
+              }}
+              disabled={clearing || !searchIndex}
+            >
+              {clearing ? "Clearing…" : "Clear indexed bodies & comments"}
+            </button>
           </section>
         </div>
       </div>

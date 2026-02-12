@@ -109,6 +109,18 @@
   flex-shrink: 0;
 }
 
+.resultSnippet {
+  display: block;
+  width: 100%;
+  color: var(--color-fg-muted);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .resultPrefix {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
