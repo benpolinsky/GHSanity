@@ -29,6 +29,7 @@ export const App: React.FC = () => {
   const [selectedNotifications, setSelectedNotifications] = useState<
     Set<string>
   >(new Set());
+  const [doneNotifications, setDoneNotifications] = useState<Set<string>>(new Set());
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.metaKey && event.key === "k") {
@@ -102,23 +103,29 @@ export const App: React.FC = () => {
               onSettingsClick={() => setSettingsVisible(true)}
             />
             <main className={styles.mainContent}>
+              <BulkActionBar
+                selectedNotifications={selectedNotifications}
+                setSelectedNotifications={setSelectedNotifications}
+                onMarkSelectedAsRead={(ids) =>
+                  setDoneNotifications((prev) => {
+                    const next = new Set(prev);
+                    ids.forEach((id) => next.add(id));
+                    return next;
+                  })
+                }
+              />
               <NotificationList
                 selectedNotifications={selectedNotifications}
                 setSelectedNotifications={setSelectedNotifications}
+                doneNotifications={doneNotifications}
+                setDoneNotifications={setDoneNotifications}
               />
             </main>
-            <BulkActionBar
-              selectedNotifications={selectedNotifications}
-              setSelectedNotifications={setSelectedNotifications}
-            />
             <SettingsPane
               isVisible={isSettingsVisible}
               onClose={() => setSettingsVisible(false)}
             />
-            <CommandPalette
-              isVisible={isPaletteVisible}
-              onClose={handleClosePalette}
-            />
+            <CommandPalette isVisible={isPaletteVisible} onClose={handleClosePalette} />
           </div>
         </SearchIndexContext.Provider>
       </AppDispatchContext.Provider>
