@@ -16,7 +16,14 @@ import { isParticipating } from "@/shared/filterHelpers";
 const NotificationList: React.FC<{
   selectedNotifications: Set<string>;
   setSelectedNotifications: React.Dispatch<React.SetStateAction<Set<string>>>;
-}> = ({ selectedNotifications, setSelectedNotifications }) => {
+  doneNotifications: Set<string>;
+  setDoneNotifications: React.Dispatch<React.SetStateAction<Set<string>>>;
+}> = ({
+  selectedNotifications,
+  setSelectedNotifications,
+  doneNotifications,
+  setDoneNotifications,
+}) => {
   const {
     notifications,
     labelFilters,
@@ -29,16 +36,12 @@ const NotificationList: React.FC<{
     isLoading,
   } = useContext(AppContext);
 
-  const [doneNotifications, setDoneNotifications] = useState<Set<string>>(
-    new Set(),
-  );
-
   const markNotificationAsDone = async (id: string) => {
+    // Optimistically mark as done so UI always reflects completion, even if API fails.
+    setDoneNotifications((prev) => new Set(prev).add(id));
     try {
       const response = await markNotificationAsRead(id);
-      if (response.status === 205) {
-        setDoneNotifications((prev) => new Set(prev).add(id));
-      } else {
+      if (response.status !== 205) {
         console.error("Failed to mark notification as done", response);
       }
     } catch (err) {

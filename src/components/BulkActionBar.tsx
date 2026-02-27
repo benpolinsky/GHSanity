@@ -7,18 +7,21 @@ import { markNotificationAsRead } from "@/app/api/github";
 interface BulkActionBarProps {
   selectedNotifications: Set<string>;
   setSelectedNotifications: React.Dispatch<React.SetStateAction<Set<string>>>;
+  onMarkSelectedAsRead?: (ids: string[]) => void;
 }
 
 const BulkActionBar: React.FC<BulkActionBarProps> = ({
   selectedNotifications,
   setSelectedNotifications,
+  onMarkSelectedAsRead,
 }) => {
   if (selectedNotifications.size === 0) return null;
 
   const markSelectedAsRead = async () => {
-    const promises = Array.from(selectedNotifications).map((id) =>
-      markNotificationAsRead(id),
-    );
+    const ids = Array.from(selectedNotifications);
+    // Optimistically reflect completion in UI
+    onMarkSelectedAsRead?.(ids);
+    const promises = ids.map((id) => markNotificationAsRead(id));
     await Promise.all(promises);
     setSelectedNotifications(new Set());
   };

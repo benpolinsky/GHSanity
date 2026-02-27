@@ -16,12 +16,18 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   isSelected,
   animationIndex = 0,
 }) => {
-  const isDone = doneNotifications.has(notification.id);
+  const [locallyDone, setLocallyDone] = React.useState(false);
+  const isDone = locallyDone || doneNotifications.has(notification.id);
 
   const handleNotificationClick = () => {
     if (!isDone) {
       markNotificationAsReadInternally(notification.id);
     }
+  };
+
+  const handleMarkDone = async () => {
+    setLocallyDone(true);
+    await markNotificationAsDone(notification.id);
   };
 
   const stateLabel = notification.details.draft
@@ -51,6 +57,14 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         onChange={() => toggleNotificationSelection(notification.id)}
         data-testid={`checkbox-${notification.id}`}
       />
+      <button
+        className={styles.quickAction}
+        onClick={handleMarkDone}
+        data-testid={`mark-as-done-${notification.id}`}
+        aria-label="Mark as read"
+      >
+        <CheckIcon className={styles.checkIcon} />
+      </button>
       <NotificationTypeIcon
         notificationType={notification.subject.type}
         state={notification.details.state}
@@ -60,6 +74,16 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         target="_blank"
         href={notification.details.html_url}
         className={styles.title}
+        style={
+          isDone
+            ? {
+                textDecoration: "line-through",
+                textDecorationThickness: "2px",
+                textDecorationColor: "var(--color-fg-muted)",
+                color: "var(--color-fg-muted)",
+              }
+            : undefined
+        }
         title={notification.subject.title}
         onClick={handleNotificationClick}
         rel="noreferrer"
@@ -72,14 +96,12 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           {stateLabel}
         </span>
       )}
-      <button
-        className={styles.quickAction}
-        onClick={() => markNotificationAsDone(notification.id)}
-        data-testid={`mark-as-done-${notification.id}`}
-        aria-label="Mark as read"
-      >
-        <CheckIcon className={styles.checkIcon} />
-      </button>
+      {isDone && (
+        <span className={styles.donePill} aria-label="Notification completed">
+          <CheckIcon className={styles.donePillIcon} />
+          Done
+        </span>
+      )}
     </li>
   );
 };
