@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import styles from "./NotificationList.module.css";
 import NotificationItem from "./NotificationItem";
 import {

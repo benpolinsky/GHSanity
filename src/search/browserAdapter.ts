@@ -1,4 +1,5 @@
 import MiniSearch from "minisearch";
+import type { SearchResult as MiniSearchResult } from "minisearch";
 import type { SearchFilters, SearchIndex, SearchIndexStatus, SearchResult, ThreadDoc } from "./types";
 
 const DB_NAME = "gh-sanity-search";
@@ -164,9 +165,9 @@ export class BrowserSearchIndex implements SearchIndex {
         const results = this.miniSearch.search(query, {
             prefix: true,
             fuzzy: 0.2,
-        }) as MiniSearch.SearchResult<StoredDoc>[];
+        }) as MiniSearchResult[];
 
-        const filtered = results.filter((hit: MiniSearch.SearchResult<StoredDoc>) => {
+        const filtered = results.filter((hit: MiniSearchResult) => {
             const doc = this.docs.get(hit.id);
             if (!doc) return false;
             if (filters?.repo && doc.repo !== filters.repo) return false;
@@ -182,7 +183,7 @@ export class BrowserSearchIndex implements SearchIndex {
             return true;
         });
 
-        return filtered.map((hit: MiniSearch.SearchResult<StoredDoc>) => {
+        return filtered.map((hit: MiniSearchResult) => {
             const doc = this.docs.get(hit.id)!;
             return {
                 id: doc.id,

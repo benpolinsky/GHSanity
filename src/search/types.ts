@@ -1,4 +1,4 @@
-import type { NotificationType, ReasonFilter } from "@/types";
+import type { NotificationReason, NotificationType, ReasonFilter } from "@/types";
 
 export type ThreadDoc = {
     id: string;
@@ -10,7 +10,7 @@ export type ThreadDoc = {
     labels?: string[];
     state?: string;
     draft?: boolean;
-    reason?: ReasonFilter;
+    reason?: NotificationReason;
     updatedAt?: string;
     unread?: boolean;
     url: string;

@@ -1,6 +1,5 @@
 import {
     getIssueComments,
-    getPullRequestComments,
     getPullRequestReviewComments,
 } from "@/app/api/github";
 import type { Notification } from "@/types";

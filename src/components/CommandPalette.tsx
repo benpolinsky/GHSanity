@@ -13,6 +13,7 @@ import { AppContext, AppDispatchContext } from "@/store/AppContext";
 import type { Notification } from "@/types";
 import NotificationTypeIcon from "@/components/notifications/NotificationTypeIcon";
 import { SearchIndexContext } from "@/store/SearchIndexContext";
+import type { SearchIndexStatus } from "@/search/types";
 import type { SearchResult } from "@/search/types";
 import { hydrateDiscussions } from "@/search/hydrationPipeline";
 
@@ -57,7 +58,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<ResultItem[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [status, setStatus] = useState(() => ({
+  const [status, setStatus] = useState<SearchIndexStatus>(() => ({
     isReady: false,
     isHydrating: false,
     partialHydration: false,
