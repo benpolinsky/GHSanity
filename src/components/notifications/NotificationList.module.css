@@ -49,6 +49,7 @@
 
 /* --- Repo group --- */
 .repoGroup {
+  margin-top: var(--space-sm);
   margin-bottom: var(--space-xs);
 }
 
@@ -129,7 +130,7 @@
 .row {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   height: 34px;
   padding: 0 var(--space-lg);
   border-bottom: 1px solid var(--color-border-subtle);
@@ -245,10 +246,38 @@
 
 /* --- Done state --- */
 .done {
-  opacity: 0.4;
+  opacity: 0.5;
+  background: var(--color-bg-surface-2);
+  border-left: 3px solid var(--color-border-subtle);
 }
 
-.done .title {
-  text-decoration: line-through;
-  color: var(--color-fg-muted);
+.done .title,
+.row.done .title {
+  text-decoration-line: line-through !important;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--color-fg-muted);
+  color: var(--color-fg-muted) !important;
+}
+
+.donePill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  color: var(--color-state-merged);
+  background: var(--color-state-merged-muted);
+  padding: 2px var(--space-xs);
+  border-radius: var(--radius-sm);
+}
+
+.donePillIcon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Add a little breathing room between repo groups */
+.repoGroup {
+  margin-top: var(--space-sm);
 }

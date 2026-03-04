@@ -110,3 +110,56 @@
   padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--color-border-subtle);
 }
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-sm);
+  color: var(--color-fg-secondary);
+}
+
+.statusLabel {
+  font-weight: var(--weight-medium);
+  color: var(--color-fg-primary);
+}
+
+.statusValue {
+  font-family: var(--font-mono);
+  color: var(--color-fg-muted);
+}
+
+.statusActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-default);
+  background: var(--color-bg-surface-2);
+  color: var(--color-fg-primary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.actionButton:hover:not(:disabled) {
+  background: var(--color-bg-surface-1, #1a1a1d);
+  border-color: var(--color-border-strong, #4a4a52);
+}
+
+.actionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
